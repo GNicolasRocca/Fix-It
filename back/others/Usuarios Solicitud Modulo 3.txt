@@ -1,0 +1,36 @@
+{
+  "name": "Nicolas",
+  "email": "nico@mail.com",
+  "birthdate": "2025-11-02T00:00:00Z",
+  "nDni": 1235678,
+  "username": "Bico",
+  "password": "1234"
+}
+
+
+{
+  "name": "Roberto",
+  "email": "rober@mail.com",
+  "birthdate": "2011-08-02T00:00:00Z",
+  "nDni": 1235677,
+  "username": "Rober",
+  "password": "1234"
+}
+
+
+
+{
+  "name": "Julian",
+  "email": "juli@mail.com",
+  "birthdate": "2002-04-14T00:00:00Z",
+  "nDni": 4522355,
+  "username": "Juli",
+  "password": "12345789"
+}
+
+
+{
+	"userId": 1,
+  "date": "2025-11-12",
+	"time": "14:30"
+}
