@@ -1,5 +1,5 @@
 interface calendar_appointment_DTO{
-    date: Date,
+    date: string,
     time: string,
     userId: number
 }

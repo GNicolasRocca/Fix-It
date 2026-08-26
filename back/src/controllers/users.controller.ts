@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { get_users_service, get_user_id_service, user_register_service, user_login_service } from "../handlers/users_service";
+import { get_users_service, get_user_id_service, user_register_service, user_login_service } from "../handlers/users.service";
 import { user_login_DTO, user_register_DTO } from "../DTOs/user_DTOs";
 
 const users_get = async (req: Request, res: Response): Promise<void> => {

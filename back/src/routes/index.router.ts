@@ -1,6 +1,6 @@
 import { Router } from "express";
-import users_router from "../routes/user_router";
-import turns_router from "../routes/turns_router";
+import users_router from "./user.router";
+import turns_router from "./appointments.router";
 
 const router: Router = Router();
 

@@ -1,6 +1,6 @@
 import { User } from "../entities/User.entity";
 import { user_register_DTO } from "../DTOs/user_DTOs";
-import { check_credentials_login, create_credentials } from "./credentials_service";
+import { check_credentials_login, create_credentials } from "./credentials.service";
 import { Credential } from "../entities/Credentials.entity";
 import { Appointment } from "../entities/Appointments.entity";
 import { UserRepository } from "../repositories/User.repository";
