@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Nav = styled.nav`
   background-color: #4a90e2;
-  padding: 12px 20px;
+  padding: 2px 20px;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 `;
 
@@ -11,16 +11,18 @@ const NavList = styled.ul`
   display: flex;
   justify-content: center;
   list-style: none;
-  margin: 0;
   padding: 0;
 `;
 
 const NavItem = styled.li`
-  margin: 0 15px;
+  margin-left: 20px;
+  margin-right: 15px;
+  background-color: #FFF5F5;
+  padding: 20px;
 `;
 
 const NavLink = styled(Link)`
-  color: #fff;
+  color: black;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;

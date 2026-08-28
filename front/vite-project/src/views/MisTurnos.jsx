@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-// ✅ Styled Components
 const Container = styled.div`
   max-width: 600px;
   margin: 40px auto;
@@ -45,7 +44,7 @@ const TurnText = styled.p`
 
 const Status = styled.span`
   font-weight: bold;
-  color: ${(props) => (props.status === "active" ? "#28a745" : "#dc3545")};
+  color: ${(props) => (props.$status === "active" ? "#28a745" : "#dc3545")};
 `;
 
 const CancelButton = styled.button`
@@ -79,10 +78,11 @@ const MisTurnos = () => {
       return;
     }
 
-    axios.get(`http://localhost:3000/turns/${user.id}`)
+    axios
+      .get(`http://localhost:3000/turns/user/${user.id}`)
       .then(res => {
-        console.log("RESPUESTA BACK:", res.data);
-        setTurnos([res.data.data]);
+        console.log("TURNOS DEL USUARIO:", res.data);
+        setTurnos(res.data.data);
       })
       .catch(err => console.log(err));
   }, []);
@@ -115,7 +115,9 @@ const MisTurnos = () => {
               <TurnText>Fecha: {t.date}</TurnText>
               <TurnText>Hora: {t.time}</TurnText>
               <TurnText>
-                Estado: <Status status={t.status}>{t.status}</Status>
+                Estado: <Status $status={t.status}>
+                    {t.status}
+                  </Status>
               </TurnText>
             </TurnInfo>
 
