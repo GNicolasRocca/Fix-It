@@ -70,14 +70,7 @@ export const Register = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({
-    name: "Debe colocar un nombre",
-    email: "Debe colocar un mail",
-    birthdate: "Debe colocar una fecha de nacimiento",
-    nDni: "Debe colocar un DNI",
-    username: "Debe colocar un nombre de usuario",
-    password: "Debe colocar una contraseña",
-  });
+  const [errors, setErrors] = useState({});
 
   const handle_input = (e) => {
     const updatedData = {
@@ -85,7 +78,6 @@ export const Register = () => {
       [e.target.name]: e.target.value,
     };
     setData(updatedData);
-    setErrors(validate(updatedData));
   };
 
   const handle_submit = (e) => {
@@ -93,17 +85,19 @@ export const Register = () => {
     const validationErrors = validate(data);
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      axios
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    axios
         .post("http://localhost:3000/users/register", data)
-        .then((res) => {
+        .then(() => {
           alert("Registro exitoso");
         })
         .catch((err) => {
           console.error(err);
           alert("Error en el registro");
         });
-    }
   };
 
   return (

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import { validate_login } from "../../helpers/validate_login";
+import { useAuth } from "../../context/AuthContext";
 
 const Form = styled.form`
   max-width: 400px;
@@ -71,17 +72,21 @@ export const Login = () => {
     password: "Debe colocar una contraseña",
   });
 
+  const { login } = useAuth();
+
   const handle_input = (e) => {
     const updatedData = {
       ...data,
       [e.target.name]: e.target.value,
     };
+
     setData(updatedData);
     setErrors(validate_login(updatedData));
   };
 
   const handle_submit = (e) => {
     e.preventDefault();
+
     const validationErrors = validate_login(data);
     setErrors(validationErrors);
 
@@ -89,10 +94,15 @@ export const Login = () => {
 
     axios
       .post("http://localhost:3000/users/login", data, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((res) => {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        console.log("LOGIN RESPONSE:", res.data);
+
+        login(res.data.user);
+
         alert("Inicio de sesión exitoso");
       })
       .catch((err) => {
@@ -113,7 +123,12 @@ export const Login = () => {
           onChange={handle_input}
           placeholder="Nombre de usuario"
         />
-        {errors.username && <ErrorLabel>{errors.username}</ErrorLabel>}
+
+        {errors.username && (
+          <ErrorLabel>
+            {errors.username}
+          </ErrorLabel>
+        )}
       </InputGroup>
 
       <InputGroup>
@@ -124,10 +139,17 @@ export const Login = () => {
           onChange={handle_input}
           placeholder="Contraseña"
         />
-        {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
+
+        {errors.password && (
+          <ErrorLabel>
+            {errors.password}
+          </ErrorLabel>
+        )}
       </InputGroup>
 
-      <SubmitButton type="submit">Ingresar</SubmitButton>
+      <SubmitButton type="submit">
+        Ingresar
+      </SubmitButton>
     </Form>
   );
 };

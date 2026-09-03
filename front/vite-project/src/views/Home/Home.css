@@ -1,0 +1,50 @@
+.homeContainer {
+  position: relative;
+  width: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.homeImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.appointmentButton {
+  position: absolute;
+
+  left: 78%;
+  bottom: 25%;
+
+  transform: translateX(-50%);
+
+  z-index: 10;
+
+  padding: 14px 28px;
+
+  background-color: #4a90e2;
+  color: white;
+
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+
+  border-radius: 8px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.appointmentButton:hover {
+  background-color: #357ab8;
+  transform: translateX(-50%) scale(1.05);
+}

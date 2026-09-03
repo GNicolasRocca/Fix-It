@@ -5,6 +5,7 @@ import { validate_turnos } from "../../helpers/validate_appointments";
 
 const PageWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -69,6 +70,10 @@ const SubmitButton = styled.button`
   }
 `;
 
+const TimeAvailable = styled.h1`
+
+`;
+
 export const CreateTurn = () => {
   const [data, setData] = useState({ date: "", time: "" });
   const [errors, setErrors] = useState({});
@@ -116,7 +121,7 @@ export const CreateTurn = () => {
   return (
     <PageWrapper>
       <Form onSubmit={handle_submit}>
-        <Title>Crear Turno</Title>
+        <Title>Crear turno</Title>
 
         <InputGroup>
           <Input type="date" name="date" onChange={handle_input} value={data.date} />
@@ -128,8 +133,11 @@ export const CreateTurn = () => {
           {errors.time && <ErrorLabel>{errors.time}</ErrorLabel>}
         </InputGroup>
 
-        <SubmitButton type="submit">Crear turno</SubmitButton>
+        <SubmitButton type="submit">Aceptar</SubmitButton>
       </Form>
+      <TimeAvailable>
+        Horarios de 10 a 18 hs
+      </TimeAvailable>
     </PageWrapper>
   );
 };
