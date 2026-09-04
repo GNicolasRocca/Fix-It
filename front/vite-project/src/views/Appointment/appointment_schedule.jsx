@@ -22,12 +22,6 @@ const Form = styled.form`
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-`;
-
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -71,7 +65,9 @@ const SubmitButton = styled.button`
 `;
 
 const TimeAvailable = styled.h1`
-
+  margin-bottom: 28px;
+  font-weight: 500;
+  color: #000000;
 `;
 
 export const CreateTurn = () => {
@@ -120,9 +116,10 @@ export const CreateTurn = () => {
 
   return (
     <PageWrapper>
+      <TimeAvailable>
+        Horarios de 10 a 18 hs
+      </TimeAvailable>
       <Form onSubmit={handle_submit}>
-        <Title>Crear turno</Title>
-
         <InputGroup>
           <Input type="date" name="date" onChange={handle_input} value={data.date} />
           {errors.date && <ErrorLabel>{errors.date}</ErrorLabel>}
@@ -135,9 +132,6 @@ export const CreateTurn = () => {
 
         <SubmitButton type="submit">Aceptar</SubmitButton>
       </Form>
-      <TimeAvailable>
-        Horarios de 10 a 18 hs
-      </TimeAvailable>
     </PageWrapper>
   );
 };

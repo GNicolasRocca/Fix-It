@@ -14,12 +14,6 @@ const Container = styled.div`
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-`;
-
 const TurnCard = styled.div`
   background: #fff;
   border-radius: 10px;
@@ -104,8 +98,6 @@ const MisTurnos = () => {
 
   return (
     <Container>
-      <Title>Mis turnos</Title>
-
       {turnos.length === 0 ? (
         <p>No tienes turnos</p>
       ) : (

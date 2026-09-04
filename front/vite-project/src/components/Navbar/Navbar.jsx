@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import userIcon from "../../assets/user.png";
 import { useAuth } from "../../context/AuthContext";
@@ -25,7 +25,7 @@ const NavItem = styled.li`
   padding: 20px;
 `;
 
-const NavLink = styled(Link)`
+const NavLinkStyled = styled(NavLink)`
   color: black;
   text-decoration: none;
   font-weight: 500;
@@ -33,6 +33,10 @@ const NavLink = styled(Link)`
 
   &:hover {
     color: #ffd700;
+  }
+  &.active {
+    color: #ffd700;
+    font-weight: 700;
   }
 `;
 
@@ -93,7 +97,7 @@ const MenuText = styled.p`
   font-size: 14px;
 `;
 
-const MenuLink = styled(Link)`
+const MenuLink = styled(NavLink)`
   display: block;
   text-decoration: none;
   text-align: center;
@@ -170,13 +174,13 @@ const Nav_bar = () => {
     <Nav>
       <NavList>
         <NavItem>
-          <NavLink to="/home">Inicio</NavLink>
+          <NavLinkStyled to="/home">Inicio</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLink to="/appointment/schedule">Solicitar un turno</NavLink>
+          <NavLinkStyled to="/appointment/schedule">Solicitar un turno</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLink to="/mis-turnos">Mis turnos</NavLink>
+          <NavLinkStyled to="/mis-turnos">Mis turnos</NavLinkStyled>
         </NavItem>
 
         <UserMenuContainer>
