@@ -21,8 +21,10 @@ const NavList = styled.ul`
 const NavItem = styled.li`
   margin-left: 20px;
   margin-right: 15px;
-  background-color: #FFF5F5;
   padding: 20px;
+  background-color: #FFF5F5;
+  border-style: solid;
+  border-color: #2E6FA0;
 `;
 
 const NavLinkStyled = styled(NavLink)`
@@ -181,6 +183,10 @@ const Nav_bar = () => {
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/mis-turnos">Mis turnos</NavLinkStyled>
+          //*Cambiar nombre de mis turnos*//
+        </NavItem>
+        <NavItem>
+          <NavLinkStyled to="/about_us">Sobre nosotros</NavLinkStyled>
         </NavItem>
 
         <UserMenuContainer>
