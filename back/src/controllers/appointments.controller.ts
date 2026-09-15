@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled } from "../handlers/appointments.service";
-import { calendar_appointment_DTO } from "../DTOs/appointment_DTOs";
+import { calendar_appointment_DTO } from "../dtos/appointments.dto";
 
 const turns_get = async (req: Request, res: Response) => {
     const appointments = await get_appointments_service();
@@ -90,5 +90,4 @@ const turns_put = async (req: Request<{ id: string }>, res: Response) => {
 
 export { turns_get, turns_get_id, turns_get_by_user,turns_post, turns_put };
 
-// Cambiar el nombre del archivo a appointment
 // hacer validaciones de todo

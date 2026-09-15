@@ -1,8 +1,8 @@
 // 1:16 - 21/10 correcion appointment service
-import { calendar_appointment_DTO } from "../DTOs/appointment_DTOs";
+import { calendar_appointment_DTO } from "../dtos/appointments.dto";
 import { get_user_id_service } from "./users.service";
 import { Appointment } from "../entities/Appointments.entity";
-import { AppointmentsRepository } from "../repositories/Appointments.repository";
+import { AppointmentsRepository } from "../repositories/appointments.repository";
 import { User } from "../entities/User.entity";
 import { Status } from "../interfaces/IAppointment";
 
