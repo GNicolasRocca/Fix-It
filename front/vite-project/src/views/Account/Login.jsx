@@ -101,8 +101,9 @@ export const Login = () => {
       .then((res) => {
         console.log("LOGIN RESPONSE:", res.data);
 
-        login(res.data.user);
+        login(res.data.user, res.data.token);
 
+        // Cambiar los alerts
         alert("Inicio de sesión exitoso");
       })
       .catch((err) => {

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import { validate_turnos } from "../../helpers/validate_appointments";
+import { useAuth } from "../../context/AuthContext";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -70,24 +71,31 @@ const TimeAvailable = styled.h1`
   color: #000000;
 `;
 
-export const CreateTurn = () => {
+export const ScheduleAppointment = () => {
   const [data, setData] = useState({ date: "", time: "" });
+
   const [errors, setErrors] = useState({});
+
+  const { token } = useAuth();
+
 
   const handle_input = (e) => {
     const updatedData = { ...data, [e.target.name]: e.target.value };
+
     setData(updatedData);
     setErrors(validate_turnos(updatedData));
   };
 
   const handle_submit = (e) => {
     e.preventDefault();
-    const validationErrors = validate_turnos(data);
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
+    const validationErrors = validate_turnos(data);
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) return;
+ 
+    if (!token) {
       alert("Debes iniciar sesión primero");
       return;
     }
@@ -97,27 +105,46 @@ export const CreateTurn = () => {
       return `${year}-${month}-${day}`;
     };
 
-    const turnData = {
-      userId: user.id,
+    const appointmentData = {
       date: normalizeDate(data.date),
       time: data.time,
     };
 
     axios
-      .post("http://localhost:3000/turns/schedule", turnData)
-      .then(() => {
-        alert("Turno creado exitosamente");
+      .post("http://localhost:3000/appointments-schedule", 
+        appointmentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        }
+      )
+      .then((res) => {
+        alert("Turno creado exitosamente", res.data);
+
+        setData({
+          date: "",
+          time: "",
+        });
       })
       .catch((err) => {
-        console.error("Error al crear el turno:", err);
-        alert("Hubo un problema al crear el turno");
+        console.error(
+          "Error al crear turno:",
+          err.response?.data || err.message
+        );
+
+        // esto despues cambiarlo
+        alert(
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Hubo un problema al crear el turno"
+        );
       });
   };
 
   return (
     <PageWrapper>
       <TimeAvailable>
-        Horarios de 10 a 18 hs
+        Horarios de 8 a 18 hs
       </TimeAvailable>
       <Form onSubmit={handle_submit}>
         <InputGroup>

@@ -61,7 +61,7 @@ const CancelButton = styled.button`
   }
 `;
 
-const MisTurnos = () => {
+const MyAppointments = () => {
   const [turnos, setTurnos] = useState([]);
 
   useEffect(() => {
@@ -125,4 +125,4 @@ const MisTurnos = () => {
   );
 };
 
-export default MisTurnos;
+export default MyAppointments;

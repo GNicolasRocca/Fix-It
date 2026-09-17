@@ -42,9 +42,6 @@ const NavLinkStyled = styled(NavLink)`
   }
 `;
 
-// Por ahora borra el usuario de localStorage para cerrar sesion
-// -------------------------------------------------------
-
 const UserMenuContainer = styled.div`
   position: relative;
   margin-left: auto;
@@ -164,8 +161,6 @@ const Nav_bar = () => {
     setOpenUserMenu(false);
   };
 
-  // Por ahora solamente eliminamos el usuario del localStorage.
-  // Más adelante podemos implementar el logout desde el backend.
   const handleLogout = () => {
     logout();
     setOpenUserMenu(false);
@@ -179,14 +174,13 @@ const Nav_bar = () => {
           <NavLinkStyled to="/home">Inicio</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/appointment/schedule">Solicitar un turno</NavLinkStyled>
+          <NavLinkStyled to="/appointment-schedule">Solicitar un turno</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/mis-turnos">Mis turnos</NavLinkStyled>
-          //*Cambiar nombre de mis turnos*//
+          <NavLinkStyled to="/my-appointments">Mis turnos</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/about_us">Sobre nosotros</NavLinkStyled>
+          <NavLinkStyled to="/about-us">Sobre nosotros</NavLinkStyled>
         </NavItem>
 
         <UserMenuContainer>
