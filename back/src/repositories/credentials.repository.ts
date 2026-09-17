@@ -20,9 +20,8 @@ export const CredentialRepository = AppDataSource
         ): Promise<Credential | null> {
 
         return await this.findOne({
-            where: {
-                username
-            }
+            where: { username },
+            relations: ["user"]
         });
         },
 

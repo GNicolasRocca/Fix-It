@@ -12,7 +12,7 @@ export const UsersRepository = AppDataSource
                 email: user.email,
                 birthdate: user.birthdate,
                 nDni: user.nDni,
-                credential: Credential,
+                credentials: credential,
             });
 
             return await this.save(new_user);

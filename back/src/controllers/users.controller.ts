@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { users_get_service, user_get_id_service, user_register_service, user_login_service } from "../handlers/users.service";
 import { user_register_dto } from "../dtos/user.dto";
 import { credentials_dto } from "../dtos/credential.dto";
+import { generate_token } from "../utils/jwt";
 
 const user_register_controller = async (req: Request<unknown, unknown, user_register_dto>, res: Response) => {
     try {
@@ -21,17 +22,19 @@ const user_register_controller = async (req: Request<unknown, unknown, user_regi
 
 const user_login_controller = async (req: Request<unknown, unknown, credentials_dto>, res: Response) => {
     try {
-        console.log("BODY:", req.body);
-        const user_found = await user_login_service(req.body.username, req.body.password);
-        console.log("USUARIO ENCONTRADO:", user_found);
+        console.log("BODY DE LA REQUEST:", req.body);
+        const user_found = await user_login_service(req.body);
+
+        const token = generate_token(user_found.id);
 
         res.status(200).json({
             login: true,
             user: user_found,
+            token,
         })
-        console.log(req.body);
-    } catch(err) {
-        res.status(400).json({
+
+    } catch (err) {
+        res.status(401).json({
             message: "Datos incorrectos", 
             error: err instanceof Error ? err.message: "Error desconocido",
         });
@@ -40,7 +43,7 @@ const user_login_controller = async (req: Request<unknown, unknown, credentials_
 
 const users_get_controller = async (req: Request, res: Response): Promise<void> => {
     try {
-        res.json({
+        res.status(200).json({
             message: "Obtuvó todos los usuarios",
             data: await users_get_service(),
         });

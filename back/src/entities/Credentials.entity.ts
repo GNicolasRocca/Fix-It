@@ -9,7 +9,7 @@ export class Credential{
     @Column({ type: "varchar", unique: true, length: 50, nullable: false })
     username: string;
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 255, nullable: false })
     password: string;
 
     @OneToOne(() => User, (user) => user.credentials)

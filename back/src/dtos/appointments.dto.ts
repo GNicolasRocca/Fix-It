@@ -1,7 +1,6 @@
-interface calendar_appointment_DTO{
+interface calendar_appointment_dto{
     date: string,
-    time: string,
-    userId: number
+    time: string
 }
 
-export { calendar_appointment_DTO };
+export { calendar_appointment_dto };

@@ -1,6 +1,5 @@
-// 1:16 - 21/10 correcion appointment service
-import { calendar_appointment_DTO } from "../dtos/appointments.dto";
-import { get_user_id_service } from "./users.service";
+import { calendar_appointment_dto } from "../dtos/appointments.dto";
+import { user_get_id_service } from "./users.service";
 import { Appointment } from "../entities/Appointments.entity";
 import { AppointmentsRepository } from "../repositories/appointments.repository";
 import { User } from "../entities/User.entity";
@@ -41,19 +40,19 @@ const get_appointments_by_user_service = async (
     return appointments;
 };
 
-const calendar_appointment = async (app: calendar_appointment_DTO): Promise<Appointment> => {
+const calendar_appointment = async (app: calendar_appointment_dto, userId: number): Promise<Appointment> => {
     AppointmentsRepository.validate_appointments(app.date, app.time)
 
-    const user_found: User | undefined  = await get_user_id_service(app.userId);
+    const user_found: User | null  = await user_get_id_service(userId);
 
      if (!user_found) {
-        throw new Error(`Usuario con id ${app.userId} no encontrado`);
+        throw new Error(`Usuario con id ${userId} no encontrado`);
     }
 
     const new_appointment: Appointment = AppointmentsRepository.create({
         date: app.date,
         time: app.time,
-        user: user_found!
+        user: user_found
     })
 
     await AppointmentsRepository.save(new_appointment);
