@@ -35,13 +35,19 @@ const appointments_get_id_controller = async (req: Request<{ id: string }>, res:
 }
 
 const appointments_get_by_user_controller = async (
-    req: Request<{ userId: string }>,
+    req: Request,
     res: Response
 ) => {
     try {
-        const userId = parseInt(req.params.userId);
+        if (!req.userId) {
+            res.status(401).json({
+                message: "Usuario no autenticado"
+            });
 
-        const appointments = await get_appointments_by_user_service(userId);
+            return;
+        }
+
+        const appointments = await get_appointments_by_user_service(req.userId);
 
         res.status(200).json({
             message: "Obtuvo los turnos del usuario",

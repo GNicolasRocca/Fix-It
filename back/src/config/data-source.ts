@@ -1,17 +1,21 @@
 import { DataSource } from "typeorm";
-import dotenv from "dotenv";
+import "dotenv/config";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
+
     host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
+    port: Number(process.env.DB_PORT) || 3000,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    dropSchema: process.env.DB_DROP_SCHEMA === "true",
+
+    dropSchema: process.env.DB_DROP_SCHEMA === "false",
     synchronize: process.env.DB_SYNCHRONIZE === "true",
-    logging: process.env.DB_LOGGING === "true",
-    entities: ["src/entities/**/*.ts"],
+    logging: process.env.DB_LOGGING === "false",
+
+    entities: ["src/entities/**/*.{js,ts}"],
+
     subscribers: [],
     migrations: [],
 });
