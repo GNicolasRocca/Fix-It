@@ -1,4 +1,5 @@
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import styled from "styled-components";
 import { validate_login } from "../../helpers/validate_login";
@@ -92,12 +93,17 @@ export const Login = () => {
 
     if (Object.keys(validationErrors).length > 0) return;
 
-    axios
-      .post("http://localhost:3000/users/login", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    console.log("API_URL:", API_URL);
+    console.log("LOGIN URL:", `${API_URL}/users/login`);
+    axios  
+      .post(
+        `${API_URL}/users/login`, 
+        data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         console.log("LOGIN RESPONSE:", res.data);
 

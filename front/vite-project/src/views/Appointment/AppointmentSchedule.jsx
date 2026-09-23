@@ -1,4 +1,5 @@
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import styled from "styled-components";
 import { validate_turnos } from "../../helpers/validate_appointments";
@@ -66,6 +67,7 @@ const SubmitButton = styled.button`
 `;
 
 const TimeAvailable = styled.h1`
+  text-align: center;
   margin-bottom: 28px;
   font-weight: 500;
   color: #000000;
@@ -111,7 +113,7 @@ export const ScheduleAppointment = () => {
     };
 
     axios
-      .post("http://localhost:3000/appointments-schedule", 
+      .post(`${API_URL}/appointments/schedule`, 
         appointmentData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -144,7 +146,8 @@ export const ScheduleAppointment = () => {
   return (
     <PageWrapper>
       <TimeAvailable>
-        Horarios de 8 a 18 hs
+        Horarios de 8 a 18 hs<br/>
+        Lunes a Viernes
       </TimeAvailable>
       <Form onSubmit={handle_submit}>
         <InputGroup>

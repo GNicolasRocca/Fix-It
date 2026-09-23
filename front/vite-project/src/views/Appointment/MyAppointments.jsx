@@ -1,9 +1,9 @@
 // Utilizar lazy loading para mis turnos en caso de que el usuario saque muchos turnos
-
-
-import { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useAuth } from "../../context/AuthContext";
 
 const Container = styled.div`
   max-width: 600px;
@@ -64,27 +64,46 @@ const CancelButton = styled.button`
 const MyAppointments = () => {
   const [turnos, setTurnos] = useState([]);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const { token } = useAuth();
 
-    if (!user || !user.id) {
-      console.error("Usuario no disponible");
+  useEffect(() => {
+    if (!token) {
+      console.error("Usuario no autenticado");
       return;
     }
 
-    axios
-      .get(`http://localhost:3000/turns/user/${user.id}`)
-      .then(res => {
+     axios
+      .get(
+        `${API_URL}/appointments/my-appointments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
         console.log("TURNOS DEL USUARIO:", res.data);
         setTurnos(res.data.data);
       })
-      .catch(err => console.log(err));
-  }, []);
+      .catch((err) => {
+        console.error(
+          "Error al obtener turnos:",
+          err.response?.data || err.message
+        );
+      });
+
+  }, [token]);
 
   const cancelarTurno = async (turnoId) => {
     try {
-      const res = await axios.put(`http://localhost:3000/turns/cancel/${turnoId}`);
-      console.log("Cancelado:", res.data);
+      axios.put(`${API_URL}/appointments/cancel/${turnoId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      );
 
       setTurnos(prev =>
         prev.map(t =>
@@ -108,7 +127,7 @@ const MyAppointments = () => {
               <TurnText>Hora: {t.time}</TurnText>
               <TurnText>
                 Estado: <Status $status={t.status}>
-                    {t.status}
+                    {t.status === "cancelled" ? "Cancelado" : "Activo"}
                   </Status>
               </TurnText>
             </TurnInfo>

@@ -1,4 +1,5 @@
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import styled from "styled-components";
 import { validate } from "../../helpers/validate";
@@ -89,8 +90,13 @@ export const Register = () => {
       return;
     }
 
+  console.log("ENV COMPLETO:", import.meta.env);
+  console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+
+    console.log("API_URL:", API_URL);
+    console.log("REGISTER URL:", `${API_URL}/users/register`);
     axios
-        .post("http://localhost:3000/users/register", data)
+        .post(`${API_URL}/users/register`, data)
         .then(() => {
           alert("Registro exitoso");
         })
