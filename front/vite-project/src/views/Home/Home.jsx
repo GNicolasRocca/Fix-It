@@ -9,7 +9,7 @@ const Home = () => {
         <img src={fixItHome} alt="Fix It - Reparación de computadoras" className="homeImage" />
       </div>
 
-       <Link to="/appointment/schedule" className="appointmentButton">Solicitar turno</Link>
+       <Link to="/appointments/schedule" className="appointmentButton">Solicitar turno</Link>
     </div>
   );
 };
