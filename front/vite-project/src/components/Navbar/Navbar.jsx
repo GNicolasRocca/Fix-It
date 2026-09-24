@@ -174,7 +174,7 @@ const Nav_bar = () => {
           <NavLinkStyled to="/home">Inicio</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/appointment-schedule">Solicitar un turno</NavLinkStyled>
+          <NavLinkStyled to="/appointments/schedule">Solicitar un turno</NavLinkStyled>
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/my-appointments">Mis turnos</NavLinkStyled>
