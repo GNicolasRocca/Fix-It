@@ -177,7 +177,7 @@ const Nav_bar = () => {
           <NavLinkStyled to="/appointments/schedule">Solicitar un turno</NavLinkStyled>
         </NavItem>
         <NavItem>
-          <NavLinkStyled to="/my-appointments">Mis turnos</NavLinkStyled>
+          <NavLinkStyled to="/appointments/my-appointments">Mis turnos</NavLinkStyled>
         </NavItem>
         <NavItem>
           <NavLinkStyled to="/about-us">Sobre nosotros</NavLinkStyled>
@@ -200,8 +200,8 @@ const Nav_bar = () => {
                   <>
                     <MenuTitle>Bienvenido</MenuTitle>
                     <MenuText>Iniciá sesión o registrate para continuar.</MenuText>
-                    <MenuLink to="/login" onClick={closeUserMenu}>Iniciar sesión</MenuLink>
-                  <RegisterLink to="/register" onClick={closeUserMenu}>Registrarse</RegisterLink>
+                    <MenuLink to="/users/login" onClick={closeUserMenu}>Iniciar sesión</MenuLink>
+                  <RegisterLink to="/users/register" onClick={closeUserMenu}>Registrarse</RegisterLink>
                 </>
               )}
 
