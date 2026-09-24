@@ -40,12 +40,26 @@ const get_appointments_by_user_service = async (
     return appointments;
 };
 
-const calendar_appointment = async (app: calendar_appointment_dto, userId: number): Promise<Appointment> => {
-    AppointmentsRepository.validate_appointments(app.date, app.time)
+const calendar_appointment = async (
+    app: calendar_appointment_dto,
+    userId: number
+): Promise<Appointment> => {
 
-    const user_found: User | null  = await user_get_id_service(userId);
+    // Esto es temporal hasta que implemente alguna whitelist
+    const active_appointments =
+        await AppointmentsRepository.count_active_appointments_by_user(userId);
 
-     if (!user_found) {
+    if (active_appointments >= 5) {
+        throw new Error(
+            "Alcanzaste el límite máximo de 5 turnos activos. Para solicitar otro turno, primero debés cancelar uno."
+        );
+    }
+
+    AppointmentsRepository.validate_appointments(app.date, app.time);
+
+    const user_found: User | null = await user_get_id_service(userId);
+
+    if (!user_found) {
         throw new Error(`Usuario con id ${userId} no encontrado`);
     }
 
@@ -53,12 +67,12 @@ const calendar_appointment = async (app: calendar_appointment_dto, userId: numbe
         date: app.date,
         time: app.time,
         user: user_found
-    })
+    });
 
     await AppointmentsRepository.save(new_appointment);
 
     return new_appointment;
-}
+};
 
 
 const appointment_cancelled = async (id: number): Promise<Appointment> => {

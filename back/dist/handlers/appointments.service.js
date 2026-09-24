@@ -47,6 +47,11 @@ const get_appointments_by_user_service = (userId) => __awaiter(void 0, void 0, v
 });
 exports.get_appointments_by_user_service = get_appointments_by_user_service;
 const calendar_appointment = (app, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    // Esto es temporal hasta que implemente alguna whitelist
+    const active_appointments = yield appointments_repository_1.AppointmentsRepository.count_active_appointments_by_user(userId);
+    if (active_appointments >= 5) {
+        throw new Error("Alcanzaste el límite máximo de 5 turnos activos. Para solicitar otro turno, primero debés cancelar uno.");
+    }
     appointments_repository_1.AppointmentsRepository.validate_appointments(app.date, app.time);
     const user_found = yield (0, users_service_1.user_get_id_service)(userId);
     if (!user_found) {

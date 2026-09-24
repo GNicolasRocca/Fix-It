@@ -1,8 +1,18 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppointmentsRepository = void 0;
 const data_source_1 = require("../config/data-source");
 const Appointments_entity_1 = require("../entities/Appointments.entity");
+const IAppointment_1 = require("../interfaces/IAppointment");
 exports.AppointmentsRepository = data_source_1.AppDataSource
     .getRepository(Appointments_entity_1.Appointment)
     .extend({
@@ -28,5 +38,17 @@ exports.AppointmentsRepository = data_source_1.AppDataSource
         if (hours < 8 || hours >= 18) {
             throw new Error("No se pueden agendar turnos fuera de horario, de 8 am a 18 pm");
         }
+    }, // Este metodo es temporal hasta que se ubique un metodo mejor
+    count_active_appointments_by_user: function (userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.count({
+                where: {
+                    user: {
+                        id: userId
+                    },
+                    status: IAppointment_1.Status.active
+                }
+            });
+        });
     },
 });

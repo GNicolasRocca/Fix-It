@@ -4,7 +4,6 @@ import appointments_router from "./appointments.router";
 
 const router: Router = Router();
 
-//De aca derivo hacia las routes correspondientes
 router.use("/users", users_router);
 router.use("/appointments", appointments_router);
 

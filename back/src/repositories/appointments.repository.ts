@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/data-source";
 import { Appointment } from "../entities/Appointments.entity";
+import { Status } from "../interfaces/IAppointment";
 
 export const AppointmentsRepository = AppDataSource
     .getRepository(Appointment)
@@ -47,5 +48,17 @@ export const AppointmentsRepository = AppDataSource
                     "No se pueden agendar turnos fuera de horario, de 8 am a 18 pm"
                 );
             }
+        }, // Este metodo es temporal hasta que se ubique un metodo mejor
+        count_active_appointments_by_user: async function (
+            userId: number
+        ): Promise<number> {
+            return await this.count({
+                where: {
+                    user: {
+                        id: userId
+                    },
+                    status: Status.active
+                }
+            });
         },
     });
