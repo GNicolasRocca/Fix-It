@@ -49,6 +49,10 @@ exports.get_appointments_by_user_service = get_appointments_by_user_service;
 const calendar_appointment = (app, userId) => __awaiter(void 0, void 0, void 0, function* () {
     // Esto es temporal hasta que implemente alguna whitelist
     const active_appointments = yield appointments_repository_1.AppointmentsRepository.count_active_appointments_by_user(userId);
+    console.log("========== LÍMITE DE TURNOS ==========");
+    console.log("Usuario:", userId);
+    console.log("Turnos activos encontrados:", active_appointments);
+    console.log("======================================");
     if (active_appointments >= 5) {
         throw new Error("Alcanzaste el límite máximo de 5 turnos activos. Para solicitar otro turno, primero debés cancelar uno.");
     }
