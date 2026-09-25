@@ -71,7 +71,7 @@ export const AboutUs = () => {
 
                     <InfoSection>
                         <h3>📍 Dirección</h3>
-                        <p>Av. del Libertador 2845, Buenos Aires, Argentina</p>
+                        <p>Av. del Libertador 2845, Buenos Aires, Argentina.</p>
                         <p>
                             <small>
                                 Dirección ficticia utilizada con fines demostrativos.
