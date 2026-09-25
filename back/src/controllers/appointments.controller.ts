@@ -1,6 +1,40 @@
 import { Request, Response } from "express";
 import { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled } from "../handlers/appointments.service";
 import { calendar_appointment_dto } from "../dtos/appointments.dto";
+import { BadRequestException } from "../exceptions/BadRequestException";
+
+const appointment_create_controller = async (req: Request<unknown, unknown, calendar_appointment_dto>, res: Response) => {
+    try {
+        if (!req.userId) {
+            res.status(401).json({
+            message: "Usuario no autenticado"
+        });
+
+            return;
+        }
+
+        const new_appointment = await calendar_appointment(req.body, req.userId);
+        res.status(201).json({
+           message: "Creó un nuevo turno",
+           data: new_appointment
+        });
+    }
+    catch (err) {
+        if (err instanceof BadRequestException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+
+            return;
+        }
+
+        res.status(500).json({
+            error: "InternalServerError",
+            message: "Ocurrió un error interno al crear el turno."
+        });
+    }
+}
 
 const appointments_get_controller = async (req: Request, res: Response) => {
     const appointments = await get_appointments_service();
@@ -62,30 +96,6 @@ const appointments_get_by_user_controller = async (
         });
     }
 };
-
-const appointment_create_controller = async (req: Request<unknown, unknown, calendar_appointment_dto>, res: Response) => {
-    try {
-        if (!req.userId) {
-            res.status(401).json({
-            message: "Usuario no autenticado"
-        });
-
-        return;
-        }
-
-        const new_appointment = await calendar_appointment(req.body, req.userId);
-        res.status(201).json({
-           message: "Creó un nuevo turno",
-           data: new_appointment
-        });
-    }
-    catch (err) {
-        res.status(400).json({
-            message:"Error al crear un nuevo turno, datos incorrectos",
-            error: err instanceof Error ? err.message: "Error desconocido"
-        });
-    }
-}
 
 const appointment_edit_controller = async (req: Request<{ id: string }>, res: Response) => {
     try{
