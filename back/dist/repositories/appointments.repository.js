@@ -16,29 +16,13 @@ const IAppointment_1 = require("../interfaces/IAppointment");
 exports.AppointmentsRepository = data_source_1.AppDataSource
     .getRepository(Appointments_entity_1.Appointment)
     .extend({
-    validate_appointments: function (date, time) {
-        const [year, month, day] = date.split("-").map(Number);
-        const [hours, minutes] = time.split(":").map(Number);
-        const app_date = new Date(year, month - 1, day, hours, minutes, 0, 0);
-        const today = new Date();
-        console.log("========== VALIDACIÓN TURNO ==========");
-        console.log("Fecha recibida:", date);
-        console.log("Hora recibida:", time);
-        console.log("Fecha del turno:", app_date);
-        console.log("Fecha actual:", today);
-        console.log("¿Es pasado?:", app_date < today);
-        console.log("======================================");
-        if (app_date < today) {
-            throw new Error("No se pueden agendar turnos en fechas pasadas");
-        }
-        const day_week = app_date.getDay();
-        if (day_week === 0 || day_week === 6) {
-            throw new Error("No se pueden agendar turnos los fines de semana");
-        }
-        if (hours < 8 || hours >= 18) {
-            throw new Error("No se pueden agendar turnos fuera de horario, de 8 am a 18 pm");
-        }
-    }, // Este metodo es temporal hasta que se ubique un metodo mejor
+    calendar_appointment_repository: function (date, time, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const new_appointment = this.create({ date, time, user });
+            return yield this.save(new_appointment);
+        });
+    },
+    // Este metodo es temporal hasta que se ubique un metodo mejor
     count_active_appointments_by_user: function (userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.count({
@@ -49,6 +33,49 @@ exports.AppointmentsRepository = data_source_1.AppDataSource
                     status: IAppointment_1.Status.active
                 }
             });
+        });
+    },
+    find_appointments_repository: function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.find();
+        });
+    },
+    find_appointment_by_id_repository: function (id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.findOne({
+                where: { id }
+            });
+        });
+    },
+    find_appointment_by_user_id_repository: function (id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.find({
+                where: {
+                    user: { id }
+                },
+                order: {
+                    date: "ASC",
+                    time: "ASC"
+                }
+            });
+        });
+    },
+    find_appointment_by_id_and_user_repository: function (appointmentId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.findOne({
+                where: {
+                    id: appointmentId,
+                    user: {
+                        id: userId
+                    }
+                }
+            });
+        });
+    },
+    cancel_appointment_repository: function (appointment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            appointment.status = IAppointment_1.Status.cancelled;
+            return yield this.save(appointment);
         });
     },
 });

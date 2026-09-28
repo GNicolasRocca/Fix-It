@@ -28,4 +28,41 @@ export const AppointmentsRepository = AppDataSource
                 }
             });
         },
-    });
+        find_appointments_repository: async function (): Promise<Appointment[]> {
+            return await this.find();
+        },
+        find_appointment_by_id_repository: async function (id: number): Promise<Appointment | null> {
+            return await this.findOne({
+                where: { id } 
+            });
+        },
+        find_appointment_by_user_id_repository: async function (id: number): Promise<Appointment[]> {
+            return await this.find({
+                where: {
+                    user: { id }
+                },
+                order: {
+                    date: "ASC",
+                    time: "ASC"
+                }
+            });
+        },
+        find_appointment_by_id_and_user_repository: async function (
+            appointmentId: number,
+            userId: number
+        ): Promise<Appointment | null> {
+            return await this.findOne({
+                where: {
+                id: appointmentId,
+                user: {
+                    id: userId
+                }
+            }
+            });
+        },
+        cancel_appointment_repository: async function (appointment: Appointment): Promise<Appointment> {
+            appointment.status = Status.cancelled;
+
+            return await this.save(appointment);
+        },
+    })

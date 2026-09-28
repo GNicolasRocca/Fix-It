@@ -2,18 +2,14 @@ import { Request, Response } from "express";
 import { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled } from "../handlers/appointments.service";
 import { calendar_appointment_dto } from "../dtos/appointments.dto";
 import { BadRequestException } from "../exceptions/BadRequestException";
+import { NotFoundException } from "../exceptions/NotFoundException";
+import { ConflictException } from "../exceptions/ConflictException";
 
 const appointment_create_controller = async (req: Request<unknown, unknown, calendar_appointment_dto>, res: Response) => {
     try {
-        if (!req.userId) {
-            res.status(401).json({
-            message: "Usuario no autenticado"
-        });
+        // Fijarme como solucionar esto
+        const new_appointment = await calendar_appointment(req.body, req.userId!);
 
-            return;
-        }
-
-        const new_appointment = await calendar_appointment(req.body, req.userId);
         res.status(201).json({
            message: "Creó un nuevo turno",
            data: new_appointment
@@ -52,18 +48,48 @@ const appointments_get_controller = async (req: Request, res: Response) => {
     }
 }
 
-const appointments_get_id_controller = async (req: Request<{ id: string }>, res: Response) => {
-    const appointment_id = await get_appointment_id_service(parseInt(req.params.id))
+const appointments_get_id_controller = async (
+    req: Request<{ id: string }>,
+    res: Response
+) => {
+    try {
+        const id = Number(req.params.id);
 
-    try{
+        if (Number.isNaN(id)) {
+            throw new BadRequestException(
+                "El ID del turno debe ser un número válido."
+            );
+        }
+
+        const appointment =
+            await get_appointment_id_service(id);
+
         res.status(200).json({
-            message: "Obtuvó un turno por ID",
-            data: appointment_id
+            message: "Obtuvo un turno por ID",
+            data: appointment
         });
-    } catch(err){
-        res.status(404).json({
-            message: "Error obtener un turno por ID, turno no encontrado",
-            error: err instanceof Error ? err.message: "Error desconocido"
+
+    } catch (err) {
+
+        if (err instanceof BadRequestException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
+
+        if (err instanceof NotFoundException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
+
+        res.status(500).json({
+            error: "InternalServerError",
+            message: "Ocurrió un error interno al obtener el turno."
         });
     }
 }
@@ -73,15 +99,7 @@ const appointments_get_by_user_controller = async (
     res: Response
 ) => {
     try {
-        if (!req.userId) {
-            res.status(401).json({
-                message: "Usuario no autenticado"
-            });
-
-            return;
-        }
-
-        const appointments = await get_appointments_by_user_service(req.userId);
+        const appointments = await get_appointments_by_user_service(req.userId!);
 
         res.status(200).json({
             message: "Obtuvo los turnos del usuario",
@@ -97,21 +115,47 @@ const appointments_get_by_user_controller = async (
     }
 };
 
-const appointment_edit_controller = async (req: Request<{ id: string }>, res: Response) => {
+const appointment_cancel_controller = async (req: Request<{ id: string }>, res: Response) => {
     try{
-        const cancelled = await appointment_cancelled(parseInt(req.params.id));
+        const appointmentId = Number(req.params.id);
+
+         if (Number.isNaN(appointmentId)) {
+            throw new BadRequestException(
+                "El ID del turno debe ser un número válido."
+            );
+        }
+
+        const cancelled = await appointment_cancelled(appointmentId, req.userId!);
+
         res.status(200).json({
-            message: "Canceló un turno",
+            message: "Canceló el turno correctamente",
             data: cancelled
         }); 
     } catch(err){
-        res.status(404).json({
-            message:"Error al cancelar un turno, turno no encontrado",
-            error: err instanceof Error ? err.message: "Error desconocido"
-        });
+        if (err instanceof BadRequestException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
+
+        if (err instanceof NotFoundException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
+
+        if (err instanceof ConflictException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
     }
 }
 
-export { appointments_get_controller, appointments_get_id_controller, appointments_get_by_user_controller, appointment_create_controller, appointment_edit_controller };
-
-// hacer validaciones de todo
+export { appointments_get_controller, appointments_get_id_controller, appointments_get_by_user_controller, appointment_create_controller, appointment_cancel_controller };

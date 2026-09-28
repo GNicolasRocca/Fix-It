@@ -2,8 +2,10 @@ import { calendar_appointment_dto } from "../dtos/appointments.dto";
 import { user_get_id_service } from "./users.service";
 import { Appointment } from "../entities/Appointments.entity";
 import { AppointmentsRepository } from "../repositories/appointments.repository";
-import { Status } from "../interfaces/IAppointment";
 import { BadRequestException } from "../exceptions/BadRequestException";
+import { NotFoundException } from "../exceptions/NotFoundException";
+import { ConflictException } from "../exceptions/ConflictException";
+import { Status } from "../interfaces/IAppointment";
 
 const calendar_appointment = async (
     app: calendar_appointment_dto,
@@ -39,51 +41,42 @@ const calendar_appointment = async (
     return new_appointment;
 };
 
-// Pasar metodos al repo de aca para abajo
 const get_appointments_service = async (): Promise<Appointment[]> => {
-    const appointments = await AppointmentsRepository.find();
-
-    if(appointments.length === 0) throw Error(`No hay turnos en la base de datos`)
-
-    return appointments;
+    return await AppointmentsRepository.find_appointments_repository();
 }
 
 const get_appointment_id_service = async (id: number): Promise<Appointment> => {
-    const appointment_found: Appointment | null = await AppointmentsRepository.findOne({
-        where: {
-            id: id
-        } 
-    });
+    const appointment_found = await AppointmentsRepository.find_appointment_by_id_repository(id);
 
-    if(!appointment_found) throw Error(`El turno no ${id} fue encontrado`)
+    if(!appointment_found) throw new NotFoundException(`El turno con ${id} no fue encontrado`)
+
     return appointment_found;
 }
 
 const get_appointments_by_user_service = async (
     userId: number
 ): Promise<Appointment[]> => {
-        const appointments = await AppointmentsRepository.find({
-        where: {
-            user: {
-                id: userId
-            }
-        },
-        order: {
-            date: "ASC",
-            time: "ASC"
-        }
-    });
-
-    return appointments;
+    return await AppointmentsRepository.find_appointment_by_user_id_repository(userId);
 };
 
-const appointment_cancelled = async (id: number): Promise<Appointment> => {
-    const appointment_found: Appointment | null = await AppointmentsRepository.findOneBy({ id }); // si no usar findOne asecas
+const appointment_cancelled = async (appointmentId: number, userId: number): Promise<Appointment> => {
+    const appointment_found = await AppointmentsRepository.find_appointment_by_id_and_user_repository(appointmentId, userId);
+    
+     if (!appointment_found) {
+        throw new NotFoundException(
+            `El turno con id ${appointmentId} no fue encontrado.`
+        );
+    }
 
-    if(!appointment_found) throw Error(`El turno ${id} no fue encontrado`);
-    appointment_found.status = Status.cancelled
-    await AppointmentsRepository.save(appointment_found);
-    return appointment_found;
+    if (appointment_found.status === Status.cancelled) {
+        throw new ConflictException(
+            `El turno con id ${appointmentId} ya se encuentra cancelado.`
+        );
+    }
+
+    const cancelled_appointment = await AppointmentsRepository.cancel_appointment_repository(appointment_found);
+
+    return cancelled_appointment;
 }
 
 const validate_appointment = (date: string, time: string) => {
