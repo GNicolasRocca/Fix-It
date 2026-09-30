@@ -97,7 +97,7 @@ export const Register = () => {
         .post(`${API_URL}/users/register`, data)
         .then(() => {
           alert("Registro exitoso");
-          navigate("/login");
+          navigate("/users/login");
         })
         .catch((err) => {
           console.error(err);

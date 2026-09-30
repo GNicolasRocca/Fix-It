@@ -1,9 +1,11 @@
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
-import { useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { validate_login } from "../../helpers/validate_login";
 import { useAuth } from "../../context/AuthContext";
+
 
 const Form = styled.form`
   max-width: 400px;
@@ -75,6 +77,8 @@ export const Login = () => {
 
   const { login } = useAuth();
 
+  const navigate = useNavigate();
+
   const handle_input = (e) => {
     const updatedData = {
       ...data,
@@ -105,12 +109,12 @@ export const Login = () => {
         }
       )
       .then((res) => {
-        console.log("LOGIN RESPONSE:", res.data);
+        // Cambiar los alerts
+        alert("Inicio de sesión exitoso");
 
         login(res.data.user, res.data.token);
 
-        // Cambiar los alerts
-        alert("Inicio de sesión exitoso");
+        navigate("/home");
       })
       .catch((err) => {
         console.error(err.response?.data);
