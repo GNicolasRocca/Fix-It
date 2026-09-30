@@ -1,7 +1,8 @@
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
-import { useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { validate } from "../../helpers/validate";
 
 const Form = styled.form`
@@ -71,6 +72,8 @@ export const Register = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const [errors, setErrors] = useState({});
 
   const handle_input = (e) => {
@@ -90,15 +93,11 @@ export const Register = () => {
       return;
     }
 
-  console.log("ENV COMPLETO:", import.meta.env);
-  console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
-
-    console.log("API_URL:", API_URL);
-    console.log("REGISTER URL:", `${API_URL}/users/register`);
     axios
         .post(`${API_URL}/users/register`, data)
         .then(() => {
           alert("Registro exitoso");
+          navigate("/login");
         })
         .catch((err) => {
           console.error(err);
