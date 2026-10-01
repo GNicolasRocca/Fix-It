@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { users_get_service, user_get_id_service, user_register_service, user_login_service } from "../handlers/users.service";
-import { user_register_dto } from "../dtos/user.dto";
-import { credentials_dto } from "../dtos/credential.dto";
+import { user_register_dto } from "../dtos/users.dto";
+import { credential_dto } from "../dtos/credential.dto";
 import { generate_token } from "../utils/jwt";
 
 const user_register_controller = async (req: Request<unknown, unknown, user_register_dto>, res: Response) => {
@@ -20,12 +20,11 @@ const user_register_controller = async (req: Request<unknown, unknown, user_regi
     }
 }
 
-const user_login_controller = async (req: Request<unknown, unknown, credentials_dto>, res: Response) => {
+const user_login_controller = async (req: Request<unknown, unknown, credential_dto>, res: Response) => {
     try {
-        console.log("BODY DE LA REQUEST:", req.body);
         const user_found = await user_login_service(req.body);
 
-        const token = generate_token(user_found.id);
+        const token = generate_token(user_found.user.id);
 
         res.status(200).json({
             login: true,
@@ -59,7 +58,7 @@ const user_get_id_controller = async (req: Request<{id: string}>, res: Response)
     try {
         res.status(200).json({
             message: "Obtuvó un usuario por id",
-            data: await user_get_id_service(parseInt(req.params.id)),
+            data: await user_get_id_service(req.params.id),
         })
     } catch(err) {
         res.status(404).json({

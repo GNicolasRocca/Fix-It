@@ -16,7 +16,6 @@ const NotFoundException_1 = require("../exceptions/NotFoundException");
 const ConflictException_1 = require("../exceptions/ConflictException");
 const appointment_create_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Fijarme como solucionar esto
         const new_appointment = yield (0, appointments_service_1.calendar_appointment)(req.body, req.userId);
         res.status(201).json({
             message: "Creó un nuevo turno",
@@ -25,6 +24,13 @@ const appointment_create_controller = (req, res) => __awaiter(void 0, void 0, vo
     }
     catch (err) {
         if (err instanceof BadRequestException_1.BadRequestException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+            return;
+        }
+        if (err instanceof ConflictException_1.ConflictException) {
             res.status(err.statusCode).json({
                 error: err.name,
                 message: err.message
@@ -56,11 +62,7 @@ const appointments_get_controller = (req, res) => __awaiter(void 0, void 0, void
 exports.appointments_get_controller = appointments_get_controller;
 const appointments_get_id_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = Number(req.params.id);
-        if (Number.isNaN(id)) {
-            throw new BadRequestException_1.BadRequestException("El ID del turno debe ser un número válido.");
-        }
-        const appointment = yield (0, appointments_service_1.get_appointment_id_service)(id);
+        const appointment = yield (0, appointments_service_1.get_appointment_id_service)(req.body.id);
         res.status(200).json({
             message: "Obtuvo un turno por ID",
             data: appointment
@@ -108,11 +110,7 @@ const appointments_get_by_user_controller = (req, res) => __awaiter(void 0, void
 exports.appointments_get_by_user_controller = appointments_get_by_user_controller;
 const appointment_cancel_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const appointmentId = Number(req.params.id);
-        if (Number.isNaN(appointmentId)) {
-            throw new BadRequestException_1.BadRequestException("El ID del turno debe ser un número válido.");
-        }
-        const cancelled = yield (0, appointments_service_1.appointment_cancelled)(appointmentId, req.userId);
+        const cancelled = yield (0, appointments_service_1.appointment_cancelled)(req.params.id, req.userId);
         res.status(200).json({
             message: "Canceló el turno correctamente",
             data: cancelled

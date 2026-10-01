@@ -9,36 +9,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Credential = void 0;
+exports.Credentials = void 0;
 const typeorm_1 = require("typeorm");
-const User_entity_1 = require("./User.entity");
-let Credential = class Credential {
+const users_entity_1 = require("./users.entity");
+let Credentials = class Credentials {
 };
-exports.Credential = Credential;
+exports.Credentials = Credentials;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Credential.prototype, "id", void 0);
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], Credentials.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", unique: true, length: 50, nullable: false }),
     __metadata("design:type", String)
-], Credential.prototype, "username", void 0);
+], Credentials.prototype, "username", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: false }),
     __metadata("design:type", String)
-], Credential.prototype, "password", void 0);
+], Credentials.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => User_entity_1.User, (user) => user.credentials),
-    __metadata("design:type", User_entity_1.User)
-], Credential.prototype, "user", void 0);
+    (0, typeorm_1.OneToOne)(() => users_entity_1.Users, (users) => users.credentials),
+    __metadata("design:type", users_entity_1.Users)
+], Credentials.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
-], Credential.prototype, "createAt", void 0);
+], Credentials.prototype, "createAt", void 0);
 __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
-], Credential.prototype, "updateAt", void 0);
-exports.Credential = Credential = __decorate([
+], Credentials.prototype, "updateAt", void 0);
+exports.Credentials = Credentials = __decorate([
     (0, typeorm_1.Entity)("credentials")
-], Credential);
+], Credentials);

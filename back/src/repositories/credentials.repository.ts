@@ -1,13 +1,13 @@
 import { AppDataSource } from "../config/data-source";
-import { Credential } from "../entities/Credentials.entity";
+import { Credentials } from "../entities/credentials.entity";
 
 export const CredentialRepository = AppDataSource
-    .getRepository(Credential)
+    .getRepository(Credentials)
     .extend({
         credential_create_repo: function (
             username: string,
             password: string
-        ): Credential {
+        ): Credentials {
 
             return this.create({
                 username,
@@ -17,7 +17,7 @@ export const CredentialRepository = AppDataSource
 
         find_by_username_repo: async function (
             username: string
-        ): Promise<Credential | null> {
+        ): Promise<Credentials | null> {
 
         return await this.findOne({
             where: { username },
@@ -25,7 +25,7 @@ export const CredentialRepository = AppDataSource
         });
         },
 
-        find_by_id_repo: async function (id: number): Promise<Credential | null> { 
+        find_by_id_repo: async function (id: string): Promise<Credentials | null> { 
             return this.findOne({
                 where: { id }
             });

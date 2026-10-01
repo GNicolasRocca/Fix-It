@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt"; 
 import { CredentialRepository } from "../repositories/credentials.repository";
-import { credentials_dto } from "../dtos/credential.dto";
-import { Credential } from "../entities/Credentials.entity";
+import { credential_dto } from "../dtos/credential.dto";
+import { Credentials } from "../entities/credentials.entity";
 
-const credential_register_service = async (credential: credentials_dto): Promise<Credential> => {
+const credential_register_service = async (credential: credential_dto): Promise<Credentials> => {
   const credential_found = await CredentialRepository.find_by_username_repo(credential.username);
 
   if (credential_found) {
@@ -18,8 +18,7 @@ const credential_register_service = async (credential: credentials_dto): Promise
   );
 }
 
-const check_credentials = async (credential: credentials_dto): Promise<Credential> => {
-
+const check_credentials = async (credential: credential_dto): Promise<Credentials> => {
   const credential_found =
     await CredentialRepository.find_by_username_repo(credential.username);
 

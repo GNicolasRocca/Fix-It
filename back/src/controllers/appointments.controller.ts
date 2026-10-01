@@ -7,7 +7,6 @@ import { ConflictException } from "../exceptions/ConflictException";
 
 const appointment_create_controller = async (req: Request<unknown, unknown, calendar_appointment_dto>, res: Response) => {
     try {
-        // Fijarme como solucionar esto
         const new_appointment = await calendar_appointment(req.body, req.userId!);
 
         res.status(201).json({
@@ -17,6 +16,15 @@ const appointment_create_controller = async (req: Request<unknown, unknown, cale
     }
     catch (err) {
         if (err instanceof BadRequestException) {
+            res.status(err.statusCode).json({
+                error: err.name,
+                message: err.message
+            });
+
+            return;
+        }
+
+        if (err instanceof ConflictException) {
             res.status(err.statusCode).json({
                 error: err.name,
                 message: err.message
@@ -53,16 +61,9 @@ const appointments_get_id_controller = async (
     res: Response
 ) => {
     try {
-        const id = Number(req.params.id);
-
-        if (Number.isNaN(id)) {
-            throw new BadRequestException(
-                "El ID del turno debe ser un número válido."
-            );
-        }
-
+        
         const appointment =
-            await get_appointment_id_service(id);
+            await get_appointment_id_service(req.body.id);
 
         res.status(200).json({
             message: "Obtuvo un turno por ID",
@@ -117,15 +118,7 @@ const appointments_get_by_user_controller = async (
 
 const appointment_cancel_controller = async (req: Request<{ id: string }>, res: Response) => {
     try{
-        const appointmentId = Number(req.params.id);
-
-         if (Number.isNaN(appointmentId)) {
-            throw new BadRequestException(
-                "El ID del turno debe ser un número válido."
-            );
-        }
-
-        const cancelled = await appointment_cancelled(appointmentId, req.userId!);
+        const cancelled = await appointment_cancelled(req.params.id, req.userId!);
 
         res.status(200).json({
             message: "Canceló el turno correctamente",

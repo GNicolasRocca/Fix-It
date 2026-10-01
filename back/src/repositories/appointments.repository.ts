@@ -1,23 +1,23 @@
 import { AppDataSource } from "../config/data-source";
-import { Appointment } from "../entities/Appointments.entity";
-import { User } from "../entities/User.entity";
+import { Appointments } from "../entities/appointments.entity";
+import { Users } from "../entities/users.entity";
 import { Status } from "../interfaces/IAppointment";
 
 export const AppointmentsRepository = AppDataSource
-    .getRepository(Appointment)
+    .getRepository(Appointments)
     .extend({
         calendar_appointment_repository: async function (
             date: string,
             time: string,
-            user: User,
-        ): Promise<Appointment> {
+            user: Users,
+        ): Promise<Appointments> {
             const new_appointment = this.create({ date, time, user})
 
             return await this.save(new_appointment);
         },
         // Este metodo es temporal hasta que se ubique un metodo mejor
         count_active_appointments_by_user: async function (
-            userId: number
+            userId: string
         ): Promise<number> {
             return await this.count({
                 where: {
@@ -28,15 +28,27 @@ export const AppointmentsRepository = AppDataSource
                 }
             });
         },
-        find_appointments_repository: async function (): Promise<Appointment[]> {
+        find_appointments_repository: async function (): Promise<Appointments[]> {
             return await this.find();
         },
-        find_appointment_by_id_repository: async function (id: number): Promise<Appointment | null> {
+        find_appointment_by_id_repository: async function (id: string): Promise<Appointments | null> {
             return await this.findOne({
                 where: { id } 
             });
         },
-        find_appointment_by_user_id_repository: async function (id: number): Promise<Appointment[]> {
+        find_active_appointment_repository: async function (
+            date: string,
+            time: string
+        ): Promise<Appointments | null> {
+                return await this.findOne({
+                    where: {
+                        date,
+                        time,
+                        status: Status.active
+                    }
+                })
+        },
+        find_appointment_by_user_id_repository: async function (id: string): Promise<Appointments[]> {
             return await this.find({
                 where: {
                     user: { id }
@@ -48,19 +60,19 @@ export const AppointmentsRepository = AppDataSource
             });
         },
         find_appointment_by_id_and_user_repository: async function (
-            appointmentId: number,
-            userId: number
-        ): Promise<Appointment | null> {
+            appointmentId: string,
+            userId: string
+        ): Promise<Appointments | null> {
             return await this.findOne({
                 where: {
-                id: appointmentId,
-                user: {
-                    id: userId
+                    id: appointmentId,
+                    user: {
+                        id: userId
+                    }
                 }
-            }
             });
         },
-        cancel_appointment_repository: async function (appointment: Appointment): Promise<Appointment> {
+        cancel_appointment_repository: async function (appointment: Appointments): Promise<Appointments> {
             appointment.status = Status.cancelled;
 
             return await this.save(appointment);

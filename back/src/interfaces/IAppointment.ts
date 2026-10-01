@@ -1,5 +1,5 @@
 interface Appointment{
-    id: number
+    id: string
     date: Date
     time: string
     userId: number // User

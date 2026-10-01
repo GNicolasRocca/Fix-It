@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, OneToMany, UpdateDateColumn } from "typeorm";
-import { Credential } from "./Credentials.entity";
-import { Appointment } from "./Appointments.entity";
+import { Credentials } from "./credentials.entity";
+import { Appointments } from "./appointments.entity";
 
 @Entity("users")
-export class User{
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Users{
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: "varchar", length: 50, nullable: false })
     name: string;
@@ -19,13 +19,13 @@ export class User{
     @Column({ type: "integer", unique: true, nullable: false })
     nDni: number;
 
-    @OneToOne(() => Credential, (credential) => credential.user, 
+    @OneToOne(() => Credentials, (credentials) => credentials.user, 
     { nullable: false, cascade: true })
     @JoinColumn()
-    credentials: Credential;
+    credentials: Credentials;
 
-    @OneToMany(() => Appointment, (appointment) => appointment.user)
-    appointments: Appointment[];
+    @OneToMany(() => Appointments, (appointments) => appointments.user)
+    appointments: Appointments[];
 
     @CreateDateColumn()
     createAt?: Date;

@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersRepository = void 0;
 const data_source_1 = require("../config/data-source");
-const User_entity_1 = require("../entities/User.entity");
+const users_entity_1 = require("../entities/users.entity");
 exports.UsersRepository = data_source_1.AppDataSource
-    .getRepository(User_entity_1.User)
+    .getRepository(users_entity_1.Users)
     .extend({
     user_register_repo: function (user, credential) {
         return __awaiter(this, void 0, void 0, function* () {

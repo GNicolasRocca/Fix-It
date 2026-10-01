@@ -1,12 +1,12 @@
 import { AppDataSource } from "../config/data-source";
-import { user_register_dto } from "../dtos/user.dto";
-import { Credential } from "../entities/Credentials.entity";
-import { User } from "../entities/User.entity";
+import { user_register_dto } from "../dtos/users.dto";
+import { Credentials } from "../entities/credentials.entity";
+import { Users } from "../entities/users.entity";
 
 export const UsersRepository = AppDataSource
-    .getRepository(User)
+    .getRepository(Users)
     .extend({
-        user_register_repo: async function (user: user_register_dto, credential: Credential): Promise<User> {
+        user_register_repo: async function (user: user_register_dto, credential: Credentials): Promise<Users> {
             const new_user = this.create({
                 name: user.name,
                 email: user.email,
@@ -14,11 +14,11 @@ export const UsersRepository = AppDataSource
                 nDni: user.nDni,
                 credentials: credential,
             });
-
+            
             return await this.save(new_user);
         },
 
-        find_all_users_repo: async function (): Promise<User[]> {
+        find_all_users_repo: async function (): Promise<Users[]> {
 
             return await this.find({
                 select: {
@@ -31,7 +31,7 @@ export const UsersRepository = AppDataSource
             });
         },
 
-        find_by_id_repo: async function (id: number): Promise<User | null> {
+        find_by_id_repo: async function (id: string): Promise<Users | null> {
             
             return await this.findOne({
                 where: { id },
@@ -39,7 +39,7 @@ export const UsersRepository = AppDataSource
             });
         },
 
-        find_by_email_repo: async function (email: string): Promise<User | null> {
+        find_by_email_repo: async function (email: string): Promise<Users | null> {
 
             return await this.findOne({
                 where: { email },
@@ -47,7 +47,7 @@ export const UsersRepository = AppDataSource
             });
         },
 
-        find_by_dni_repo: async function (nDni: number): Promise<User | null> {
+        find_by_dni_repo: async function (nDni: number): Promise<Users | null> {
 
             return await this.findOne({
                 where: { nDni },

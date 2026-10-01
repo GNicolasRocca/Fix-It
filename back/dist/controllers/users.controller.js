@@ -30,9 +30,8 @@ const user_register_controller = (req, res) => __awaiter(void 0, void 0, void 0,
 exports.user_register_controller = user_register_controller;
 const user_login_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("BODY DE LA REQUEST:", req.body);
         const user_found = yield (0, users_service_1.user_login_service)(req.body);
-        const token = (0, jwt_1.generate_token)(user_found.id);
+        const token = (0, jwt_1.generate_token)(user_found.user.id);
         res.status(200).json({
             login: true,
             user: user_found,
@@ -66,7 +65,7 @@ const user_get_id_controller = (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         res.status(200).json({
             message: "Obtuvó un usuario por id",
-            data: yield (0, users_service_1.user_get_id_service)(parseInt(req.params.id)),
+            data: yield (0, users_service_1.user_get_id_service)(req.params.id),
         });
     }
     catch (err) {

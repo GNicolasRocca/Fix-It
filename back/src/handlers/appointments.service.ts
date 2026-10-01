@@ -1,6 +1,6 @@
 import { calendar_appointment_dto } from "../dtos/appointments.dto";
 import { user_get_id_service } from "./users.service";
-import { Appointment } from "../entities/Appointments.entity";
+import { Appointments } from "../entities/appointments.entity";
 import { AppointmentsRepository } from "../repositories/appointments.repository";
 import { BadRequestException } from "../exceptions/BadRequestException";
 import { NotFoundException } from "../exceptions/NotFoundException";
@@ -9,8 +9,8 @@ import { Status } from "../interfaces/IAppointment";
 
 const calendar_appointment = async (
     app: calendar_appointment_dto,
-    userId: number
-): Promise<Appointment> => {
+    userId: string
+): Promise<Appointments> => {
     const user_found = await user_get_id_service(userId);
 
     if (!user_found) {
@@ -19,9 +19,8 @@ const calendar_appointment = async (
         );
     }
 
-    validate_appointment(app.date, app.time);
+    await validate_appointment(app.date, app.time);
 
-    // Esto es temporal hasta que implemente alguna whitelist
     const active_appointments =
         await AppointmentsRepository.count_active_appointments_by_user(userId);
 
@@ -41,11 +40,11 @@ const calendar_appointment = async (
     return new_appointment;
 };
 
-const get_appointments_service = async (): Promise<Appointment[]> => {
+const get_appointments_service = async (): Promise<Appointments[]> => {
     return await AppointmentsRepository.find_appointments_repository();
 }
 
-const get_appointment_id_service = async (id: number): Promise<Appointment> => {
+const get_appointment_id_service = async (id: string): Promise<Appointments> => {
     const appointment_found = await AppointmentsRepository.find_appointment_by_id_repository(id);
 
     if(!appointment_found) throw new NotFoundException(`El turno con ${id} no fue encontrado`)
@@ -54,12 +53,12 @@ const get_appointment_id_service = async (id: number): Promise<Appointment> => {
 }
 
 const get_appointments_by_user_service = async (
-    userId: number
-): Promise<Appointment[]> => {
+    userId: string
+): Promise<Appointments[]> => {
     return await AppointmentsRepository.find_appointment_by_user_id_repository(userId);
 };
 
-const appointment_cancelled = async (appointmentId: number, userId: number): Promise<Appointment> => {
+const appointment_cancelled = async (appointmentId: string, userId: string): Promise<Appointments> => {
     const appointment_found = await AppointmentsRepository.find_appointment_by_id_and_user_repository(appointmentId, userId);
     
      if (!appointment_found) {
@@ -79,7 +78,13 @@ const appointment_cancelled = async (appointmentId: number, userId: number): Pro
     return cancelled_appointment;
 }
 
-const validate_appointment = (date: string, time: string) => {
+const validate_appointment =  async (date: string, time: string) => {
+    const appointment_taken = await AppointmentsRepository.find_active_appointment_repository(date, time);
+
+    if (appointment_taken) {
+        throw new ConflictException("Ya existe un turno reservado en ese horario");
+    }
+
     const [year, month, day] = date.split("-").map(Number);
     const [hours, minutes] = time.split(":").map(Number);
 
@@ -111,7 +116,13 @@ const validate_appointment = (date: string, time: string) => {
         throw new BadRequestException(
             "No se pueden agendar turnos fuera de horario, de 8 am a 18 pm."
         );
-    }    
+    }
+
+    if (minutes !== 0) {
+        throw new BadRequestException(
+            "Los turnos deben comenzar en una hora exacta."
+        );
+    }
 };
 
 export { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled };

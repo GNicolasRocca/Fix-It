@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./User.entity";
+import { Users } from "./users.entity";
 
 @Entity("credentials")
-export class Credential{
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Credentials{
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: "varchar", unique: true, length: 50, nullable: false })
     username: string;
@@ -12,8 +12,8 @@ export class Credential{
     @Column({ type: "varchar", length: 255, nullable: false })
     password: string;
 
-    @OneToOne(() => User, (user) => user.credentials)
-    user: User;     
+    @OneToOne(() => Users, (users) => users.credentials)
+    user: Users;     
 
     @CreateDateColumn()
     createAt?: Date;

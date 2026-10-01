@@ -21,8 +21,7 @@ const calendar_appointment = (app, userId) => __awaiter(void 0, void 0, void 0, 
     if (!user_found) {
         throw new BadRequestException_1.BadRequestException(`El usuario con id ${userId} no existe.`);
     }
-    validate_appointment(app.date, app.time);
-    // Esto es temporal hasta que implemente alguna whitelist
+    yield validate_appointment(app.date, app.time);
     const active_appointments = yield appointments_repository_1.AppointmentsRepository.count_active_appointments_by_user(userId);
     if (active_appointments >= 5) {
         throw new BadRequestException_1.BadRequestException("Alcanzaste el límite máximo de 5 turnos activos. Para solicitar otro turno, primero debés cancelar uno.");
@@ -59,7 +58,11 @@ const appointment_cancelled = (appointmentId, userId) => __awaiter(void 0, void 
     return cancelled_appointment;
 });
 exports.appointment_cancelled = appointment_cancelled;
-const validate_appointment = (date, time) => {
+const validate_appointment = (date, time) => __awaiter(void 0, void 0, void 0, function* () {
+    const appointment_taken = yield appointments_repository_1.AppointmentsRepository.find_active_appointment_repository(date, time);
+    if (appointment_taken) {
+        throw new ConflictException_1.ConflictException("Ya existe un turno reservado en ese horario");
+    }
     const [year, month, day] = date.split("-").map(Number);
     const [hours, minutes] = time.split(":").map(Number);
     const app_date = new Date(year, month - 1, day, hours, minutes, 0, 0);
@@ -74,4 +77,7 @@ const validate_appointment = (date, time) => {
     if (hours < 8 || hours >= 18) {
         throw new BadRequestException_1.BadRequestException("No se pueden agendar turnos fuera de horario, de 8 am a 18 pm.");
     }
-};
+    if (minutes !== 0) {
+        throw new BadRequestException_1.BadRequestException("Los turnos deben comenzar en una hora exacta.");
+    }
+});

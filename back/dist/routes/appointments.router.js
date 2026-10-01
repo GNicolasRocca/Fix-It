@@ -2,11 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const appointments_controller_1 = require("../controllers/appointments.controller");
+const validation_middleware_1 = require("../middlewares/validation.middleware");
 const auth_middleware_1 = require("../middlewares/auth.middleware");
+const appointments_dto_1 = require("../dtos/appointments.dto");
 const router = (0, express_1.Router)();
 router.get("/", auth_middleware_1.auth_middleware, appointments_controller_1.appointments_get_controller);
 router.get("/my-appointments", auth_middleware_1.auth_middleware, appointments_controller_1.appointments_get_by_user_controller);
 router.get("/:id", auth_middleware_1.auth_middleware, appointments_controller_1.appointments_get_id_controller);
-router.post("/schedule", auth_middleware_1.auth_middleware, appointments_controller_1.appointment_create_controller);
+router.post("/schedule", auth_middleware_1.auth_middleware, (0, validation_middleware_1.validation_middleware)(appointments_dto_1.calendar_appointment_dto), appointments_controller_1.appointment_create_controller);
 router.put("/cancel/:id", auth_middleware_1.auth_middleware, appointments_controller_1.appointment_cancel_controller);
 exports.default = router;

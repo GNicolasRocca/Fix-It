@@ -1,5 +1,5 @@
 interface Credential{
-    id: number
+    id: string
     username: string
     password: string
 }

@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CredentialRepository = void 0;
 const data_source_1 = require("../config/data-source");
-const Credentials_entity_1 = require("../entities/Credentials.entity");
+const credentials_entity_1 = require("../entities/credentials.entity");
 exports.CredentialRepository = data_source_1.AppDataSource
-    .getRepository(Credentials_entity_1.Credential)
+    .getRepository(credentials_entity_1.Credentials)
     .extend({
     credential_create_repo: function (username, password) {
         return this.create({

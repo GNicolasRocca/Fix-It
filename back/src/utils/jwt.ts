@@ -7,10 +7,10 @@ if (!JWT_SECRET) {
 }
 
 interface TokenPayload {
-  userId: number;
+  userId: string;
 }
 
-const generate_token = (userId: number): string => {
+const generate_token = (userId: string): string => {
   return jwt.sign(
     { userId },
     JWT_SECRET,

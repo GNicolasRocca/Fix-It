@@ -11,10 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppointmentsRepository = void 0;
 const data_source_1 = require("../config/data-source");
-const Appointments_entity_1 = require("../entities/Appointments.entity");
+const appointments_entity_1 = require("../entities/appointments.entity");
 const IAppointment_1 = require("../interfaces/IAppointment");
 exports.AppointmentsRepository = data_source_1.AppDataSource
-    .getRepository(Appointments_entity_1.Appointment)
+    .getRepository(appointments_entity_1.Appointments)
     .extend({
     calendar_appointment_repository: function (date, time, user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -44,6 +44,17 @@ exports.AppointmentsRepository = data_source_1.AppDataSource
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.findOne({
                 where: { id }
+            });
+        });
+    },
+    find_active_appointment_repository: function (date, time) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.findOne({
+                where: {
+                    date,
+                    time,
+                    status: IAppointment_1.Status.active
+                }
             });
         });
     },
