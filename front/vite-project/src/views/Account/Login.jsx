@@ -42,14 +42,16 @@ const Input = styled.input`
 `;
 
 const ErrorLabel = styled.label`
+  display: flex;
+  justify-content: center;
   color: #dc3545;
   font-size: 14px;
-  margin-top: 5px;
 `;
 
 const SubmitButton = styled.button`
   width: 100%;
   padding: 10px 0;
+  margin-top: 5px;
   background-color: #4a90e2;
   color: #fff;
   border: none;
@@ -70,11 +72,9 @@ export const Login = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({
-    username: "Debe colocar un nombre de usuario",
-    password: "Debe colocar una contraseña",
-  });
-
+  const [errors, setErrors] = useState({});
+  const [loginError, setLoginError] = useState("");
+  
   const { login } = useAuth();
 
   const navigate = useNavigate();
@@ -85,8 +85,9 @@ export const Login = () => {
       [e.target.name]: e.target.value,
     };
 
+     setLoginError("");
+
     setData(updatedData);
-    setErrors(validate_login(updatedData));
   };
 
   const handle_submit = (e) => {
@@ -95,10 +96,10 @@ export const Login = () => {
     const validationErrors = validate_login(data);
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length > 0) return;
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
-    console.log("API_URL:", API_URL);
-    console.log("LOGIN URL:", `${API_URL}/users/login`);
     axios  
       .post(
         `${API_URL}/users/login`, 
@@ -109,16 +110,18 @@ export const Login = () => {
         }
       )
       .then((res) => {
-        // Cambiar los alerts
-        alert("Inicio de sesión exitoso");
-
         login(res.data.user, res.data.token);
 
         navigate("/home");
       })
       .catch((err) => {
         console.error(err.response?.data);
-        alert("Error en el inicio de sesión");
+
+        setLoginError(
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "No se pudo iniciar sesión"
+        );
       });
   };
 
@@ -157,6 +160,12 @@ export const Login = () => {
           </ErrorLabel>
         )}
       </InputGroup>
+
+      {loginError && (
+        <ErrorLabel>
+          {loginError}
+        </ErrorLabel>
+      )}
 
       <SubmitButton type="submit">
         Ingresar

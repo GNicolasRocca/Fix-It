@@ -75,6 +75,7 @@ export const Register = () => {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
+  const [registerError, setRegisterError] = useState("");
 
   const handle_input = (e) => {
     const updatedData = {
@@ -86,6 +87,9 @@ export const Register = () => {
 
   const handle_submit = (e) => {
     e.preventDefault();
+
+    setRegisterError("");
+
     const validationErrors = validate(data);
     setErrors(validationErrors);
 
@@ -96,12 +100,16 @@ export const Register = () => {
     axios
         .post(`${API_URL}/users/register`, data)
         .then(() => {
-          alert("Registro exitoso");
           navigate("/users/login");
         })
         .catch((err) => {
-          console.error(err);
-          alert("Error en el registro");
+          console.error(err.response?.data);
+
+          setRegisterError(
+            err.response?.data?.error ||
+            err.response?.data?.message ||
+            "No se pudo completar el registro"
+          );
         });
   };
 
@@ -139,6 +147,12 @@ export const Register = () => {
         {errors.password && <ErrorLabel>{errors.password}</ErrorLabel>}
       </InputGroup>
 
+      {registerError && (
+        <ErrorLabel>
+          {registerError}
+        </ErrorLabel>
+      )}
+      
       <SubmitButton type="submit">Registrarse</SubmitButton>
     </Form>
   );
