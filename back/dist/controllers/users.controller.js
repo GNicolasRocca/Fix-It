@@ -31,7 +31,7 @@ exports.user_register_controller = user_register_controller;
 const user_login_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user_found = yield (0, users_service_1.user_login_service)(req.body);
-        const token = (0, jwt_1.generate_token)(user_found.user.id);
+        const token = (0, jwt_1.generate_token)(user_found.user.id, user_found.user.role);
         res.status(200).json({
             login: true,
             user: user_found,

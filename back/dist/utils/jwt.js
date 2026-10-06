@@ -9,8 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET no está configurado");
 }
-const generate_token = (userId) => {
-    return jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: "2h" });
+const generate_token = (userId, role) => {
+    return jsonwebtoken_1.default.sign({ userId, role }, JWT_SECRET, { expiresIn: "2h" });
 };
 exports.generate_token = generate_token;
 const verify_token = (token) => {

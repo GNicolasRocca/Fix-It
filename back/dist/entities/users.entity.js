@@ -13,6 +13,7 @@ exports.Users = void 0;
 const typeorm_1 = require("typeorm");
 const credentials_entity_1 = require("./credentials.entity");
 const appointments_entity_1 = require("./appointments.entity");
+const IRole_1 = require("../interfaces/IRole");
 let Users = class Users {
 };
 exports.Users = Users;
@@ -36,6 +37,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: "integer", unique: true, nullable: false }),
     __metadata("design:type", Number)
 ], Users.prototype, "nDni", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "enum",
+        enum: IRole_1.Role,
+        default: IRole_1.Role.user
+    }),
+    __metadata("design:type", String)
+], Users.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => credentials_entity_1.Credentials, (credentials) => credentials.user, { nullable: false, cascade: true }),
     (0, typeorm_1.JoinColumn)(),

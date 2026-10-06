@@ -10,7 +10,14 @@ const user_register_controller = async (req: Request<unknown, unknown, user_regi
 
         res.status(201).json({
             message: "Usuario creado correctamente",
-            data: new_user,
+            data: {
+                id: new_user.id,
+                name: new_user.name,
+                email: new_user.email,
+                birthdate: new_user.birthdate,
+                nDni: new_user.nDni,
+                role: new_user.role
+            },
         })
     } catch (err) {
         res.status(400).json({
@@ -24,7 +31,7 @@ const user_login_controller = async (req: Request<unknown, unknown, credential_d
     try {
         const user_found = await user_login_service(req.body);
 
-        const token = generate_token(user_found.user.id);
+        const token = generate_token(user_found.user.id, user_found.user.role);
 
         res.status(200).json({
             login: true,

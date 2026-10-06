@@ -3,6 +3,7 @@ import { user_register_dto } from "../dtos/users.dto";
 import { check_credentials, credential_register_service } from "./credentials.service";
 import { UsersRepository } from "../repositories/users.repository";
 import { credential_dto } from "../dtos/credential.dto";
+import { NotFoundException } from "../exceptions/NotFoundException";
 
 const user_register_service = async (
   user: user_register_dto
@@ -32,7 +33,7 @@ const user_login_service = async (credential_login: credential_dto) => {
     const login_check = await check_credentials(credential_login);
 
     if (!login_check.user) {
-        throw new Error("No se encontró el usuario asociado a las credenciales");
+        throw new NotFoundException("No se encontró el usuario asociado a las credenciales");
     }
 
     return login_check;
@@ -42,10 +43,10 @@ const users_get_service = async (): Promise<Users[]> => {
     return await UsersRepository.find_all_users_repo();
 }
 
-const user_get_id_service = async (id: string): Promise<Users | null> => {
+const user_get_id_service = async (id: string): Promise<Users> => {
     const user_found = await UsersRepository.find_by_id_repo(id);
 
-    if(!user_found) throw new Error(`El usuario con el id: ${id} no fue encontrado`);
+    if (!user_found) throw new NotFoundException(`El usuario con el id: ${id} no fue encontrado`);
     
     return user_found;
 }

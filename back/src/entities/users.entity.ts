@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, OneToMany, UpdateDateColumn } from "typeorm";
 import { Credentials } from "./credentials.entity";
 import { Appointments } from "./appointments.entity";
+import { Role } from "../interfaces/IRole";
 
 @Entity("users")
 export class Users{
@@ -18,6 +19,13 @@ export class Users{
 
     @Column({ type: "integer", unique: true, nullable: false })
     nDni: number;
+
+    @Column({
+        type: "enum",
+        enum: Role,
+        default: Role.user
+    })
+    role: Role;
 
     @OneToOne(() => Credentials, (credentials) => credentials.user, 
     { nullable: false, cascade: true })

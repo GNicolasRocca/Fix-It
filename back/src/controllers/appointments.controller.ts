@@ -116,6 +116,28 @@ const appointments_get_by_user_controller = async (
     }
 };
 
+const appointments_get_by_user_admin_controller = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+
+        const appointments = await get_appointments_by_user_service(userId);
+
+        res.status(200).json({
+            message: `Turnos obtenidos correctamente`,
+            appointments
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Error al obtener los turnos del usuario",
+            error: err instanceof Error
+                ? err.message
+                : "Error desconocido"
+        });
+    }
+
+}
+
 const appointment_cancel_controller = async (req: Request<{ id: string }>, res: Response) => {
     try{
         const cancelled = await appointment_cancelled(req.params.id, req.userId!);
@@ -151,4 +173,4 @@ const appointment_cancel_controller = async (req: Request<{ id: string }>, res: 
     }
 }
 
-export { appointments_get_controller, appointments_get_id_controller, appointments_get_by_user_controller, appointment_create_controller, appointment_cancel_controller };
+export { appointments_get_controller, appointments_get_id_controller, appointments_get_by_user_controller, appointments_get_by_user_admin_controller, appointment_create_controller, appointment_cancel_controller };

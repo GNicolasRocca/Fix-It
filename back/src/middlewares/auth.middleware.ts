@@ -31,16 +31,16 @@ const auth_middleware = (
     const decoded = verify_token(token);
 
     req.userId = decoded.userId;
+    req.userRole = decoded.role;
 
     next();
 
   } catch (err) {
-    res.status(401).json({
-      message: "Token inválido o expirado",
-      error: err instanceof Error ? err.message: "Error desconocido",
-    });
-
-  }
+      res.status(401).json({
+        message: "Token inválido o expirado",
+        error: err instanceof Error ? err.message: "Error desconocido",
+      });
+    }
 };
 
 export {

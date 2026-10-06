@@ -55,7 +55,11 @@ const get_appointment_id_service = async (id: string): Promise<Appointments> => 
 const get_appointments_by_user_service = async (
     userId: string
 ): Promise<Appointments[]> => {
-    return await AppointmentsRepository.find_appointment_by_user_id_repository(userId);
+    await user_get_id_service(userId);
+
+    const appointments = await AppointmentsRepository.find_appointment_by_user_id_repository(userId);
+
+    return appointments;
 };
 
 const appointment_cancelled = async (appointmentId: string, userId: string): Promise<Appointments> => {
