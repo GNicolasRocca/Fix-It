@@ -14,7 +14,7 @@ router.post("/login", validation_middleware(credential_dto), user_login_controll
 router.get("/", auth_middleware, role_middleware(Role.admin), users_get_controller); 
 router.get("/user", auth_middleware, user_get_id_controller); 
 router.get("/get-user/:id", auth_middleware, role_middleware(Role.admin), user_get_id_admin_controller);
-router.put("/edit", validation_middleware(user_edit_dto), auth_middleware, user_edit_controller);
+router.put("/edit", validation_middleware(user_edit_dto), auth_middleware, user_edit_controller); // Me parece que conviene cambiar el login con username por el mail
 // Poder borrar el usuario por su id 
 // poder borrar usuario por su id ADMIN
 
