@@ -1,5 +1,5 @@
 import { AppDataSource } from "../config/data-source";
-import { user_register_dto } from "../dtos/users.dto";
+import { user_edit_dto, user_register_dto } from "../dtos/users.dto";
 import { Credentials } from "../entities/credentials.entity";
 import { Users } from "../entities/users.entity";
 
@@ -65,5 +65,9 @@ export const UsersRepository = AppDataSource
                 where: { nDni },
                 relations: [ "appointments" ]
             });
+        },
+
+        edit_user_by_id_repo: async function (id: string, user: Omit<user_edit_dto, "username">): Promise<void> {
+            await this.update({ id }, user );
         }
 });

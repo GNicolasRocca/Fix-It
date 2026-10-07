@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { users_get_service, user_get_id_service, user_register_service, user_login_service, user_get_id_admin_service } from "../handlers/users.service";
-import { user_register_dto } from "../dtos/users.dto";
+import { users_get_service, user_get_id_service, user_register_service, user_login_service, user_get_id_admin_service, user_edit_service } from "../handlers/users.service";
+import { user_edit_dto, user_register_dto } from "../dtos/users.dto";
 import { credential_dto } from "../dtos/credential.dto";
 import { generate_token } from "../utils/jwt";
 
@@ -41,7 +41,9 @@ const user_login_controller = async (req: Request<unknown, unknown, credential_d
             user: {
                 id: user_found.id,
                 username: user_found.username,
+
                 userId: user_found.user.id,
+                name: user_found.user.name,
                 email: user_found.user.email,
                 birthdate: user_found.user.birthdate,
                 nDni: user_found.user.nDni,
@@ -129,4 +131,34 @@ const user_get_id_admin_controller = async (req: Request<{ id: string }>, res: R
     }
 }
 
-export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller };
+const user_edit_controller = async (req: Request<unknown, unknown, user_edit_dto>, res: Response) => {
+    try {
+        const user_edit = await user_edit_service(req.userId!, req.body);
+
+        res.status(200).json({
+            message: "Modificó su usuario",
+            data: {
+                userId: user_edit.id,
+                email: user_edit.email,
+                name: user_edit.name,
+                birthdate: user_edit.birthdate,
+                nDni: user_edit.nDni,
+                role: user_edit.role,
+                createAt: user_edit.createAt,
+                updateAt: user_edit.updateAt,
+                appointments: user_edit.appointments,
+
+                credentialId: user_edit.credentials.id,
+                username: user_edit.credentials.username,
+            }
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            message: "Error al modificar usuario",
+            error: err instanceof Error ? err.message: "Error desconocido",
+        })
+    }
+}
+
+export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller, user_edit_controller };

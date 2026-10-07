@@ -29,5 +29,16 @@ export const CredentialRepository = AppDataSource
             return this.findOne({
                 where: { id }
             });
+        },
+
+        edit_username_repo: async function (
+            credentialId: string,
+            username: string
+        ): Promise<void> {
+
+            await this.update(
+                { id: credentialId },
+                { username }
+            );
         }
 });

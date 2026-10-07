@@ -1,9 +1,10 @@
 import { Users } from "../entities/users.entity";
-import { user_register_dto } from "../dtos/users.dto";
+import { user_edit_dto, user_register_dto } from "../dtos/users.dto";
 import { check_credentials, credential_register_service } from "./credentials.service";
 import { UsersRepository } from "../repositories/users.repository";
 import { credential_dto } from "../dtos/credential.dto";
 import { NotFoundException } from "../exceptions/NotFoundException";
+import { CredentialRepository } from "../repositories/credentials.repository";
 
 const user_register_service = async (
   user: user_register_dto
@@ -59,4 +60,26 @@ const user_get_id_admin_service = async (id: string): Promise<Users> => {
     return user_found;
 }
 
-export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service };
+const user_edit_service = async (id: string, user: user_edit_dto): Promise<Users> => {
+    const user_found = await user_get_id_service(id);
+
+    const {
+        username,
+        ...user_data
+    } = user;
+
+    await UsersRepository.edit_user_by_id_repo(id, user_data);
+
+    if (username) {
+        await CredentialRepository.edit_username_repo(
+            user_found.credentials.id,
+            username
+        );
+    }
+
+    const user_updated = await user_get_id_service(id);
+
+    return user_updated;
+}
+
+export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service, user_edit_service };
