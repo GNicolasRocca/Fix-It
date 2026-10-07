@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { users_get_service, user_get_id_service, user_register_service, user_login_service } from "../handlers/users.service";
+import { users_get_service, user_get_id_service, user_register_service, user_login_service, user_get_id_admin_service } from "../handlers/users.service";
 import { user_register_dto } from "../dtos/users.dto";
 import { credential_dto } from "../dtos/credential.dto";
 import { generate_token } from "../utils/jwt";
@@ -16,7 +16,10 @@ const user_register_controller = async (req: Request<unknown, unknown, user_regi
                 email: new_user.email,
                 birthdate: new_user.birthdate,
                 nDni: new_user.nDni,
-                role: new_user.role
+                role: new_user.role,
+
+                credentialId: new_user.credentials.id,
+                username: new_user.credentials.username,
             },
         })
     } catch (err) {
@@ -35,7 +38,15 @@ const user_login_controller = async (req: Request<unknown, unknown, credential_d
 
         res.status(200).json({
             login: true,
-            user: user_found,
+            user: {
+                id: user_found.id,
+                username: user_found.username,
+                userId: user_found.user.id,
+                email: user_found.user.email,
+                birthdate: user_found.user.birthdate,
+                nDni: user_found.user.nDni,
+                role: user_found.user.role
+            },
             token,
         })
 
@@ -61,18 +72,61 @@ const users_get_controller = async (req: Request, res: Response): Promise<void> 
     }
 }
 
-const user_get_id_controller = async (req: Request<{id: string}>, res: Response) => {
+const user_get_id_controller = async (req: Request, res: Response) => {
     try {
+        const user = await user_get_id_service(req.userId!);
+
         res.status(200).json({
-            message: "Obtuvó un usuario por id",
-            data: await user_get_id_service(req.params.id),
+            message: "Obtuvó su usuario por su id",
+            data: {
+                userId: user.id,
+                email: user.email,
+                name: user.name,
+                birthdate: user.birthdate,
+                nDni: user.nDni,
+                role: user.role,
+                createAt: user.createAt,
+                updateAt: user.updateAt,
+                appointments: user.appointments,
+
+                credentialId: user.credentials.id,
+                username: user.credentials.username,
+            }
         })
     } catch(err) {
         res.status(404).json({
-            message: "Error al obtener un usuario por ID, usuario por id no encontrado", 
+            message: "Error al obtener su usuario por su ID, usuario por su ID no encontrado", 
             error: err instanceof Error ? err.message: "Error desconocido",
         });
     }
 }
 
-export { users_get_controller, user_get_id_controller, user_register_controller, user_login_controller };
+const user_get_id_admin_controller = async (req: Request<{ id: string }>, res: Response) => {
+    try {
+        const user_found = await user_get_id_admin_service(req.params.id);
+
+        res.status(200).json({
+            message: "Obtuvó un usuario por su id",
+            data: {
+                userId: user_found.id,
+                email: user_found.email,
+                birthdate: user_found.birthdate,
+                nDni: user_found.nDni,
+                role: user_found.role,
+                createAt: user_found.createAt,
+                updateAt: user_found.updateAt,
+                appointments: user_found.appointments,
+
+                credentialId: user_found.credentials.id,
+                username: user_found.credentials.username,
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            message: "Error al obtener un usuario por su ID, usuario por su ID no encontrado",
+            error: err instanceof Error ? err.message: "Error desconocido",
+        })
+    }
+}
+
+export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller };

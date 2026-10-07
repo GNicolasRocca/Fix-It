@@ -46,9 +46,17 @@ const users_get_service = async (): Promise<Users[]> => {
 const user_get_id_service = async (id: string): Promise<Users> => {
     const user_found = await UsersRepository.find_by_id_repo(id);
 
-    if (!user_found) throw new NotFoundException(`El usuario con el id: ${id} no fue encontrado`);
+    if (!user_found) throw new NotFoundException(`Su usuario con id: ${id} no fue encontrado`);
     
     return user_found;
 }
 
-export { users_get_service, user_get_id_service, user_register_service, user_login_service };
+const user_get_id_admin_service = async (id: string): Promise<Users> => {
+    const user_found = await UsersRepository.find_by_id_repo(id);
+
+    if (!user_found) throw new NotFoundException(`El usuario con el id: ${id} no fue encontrado`);
+
+    return user_found;
+}
+
+export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service };

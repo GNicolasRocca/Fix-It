@@ -26,7 +26,19 @@ export const UsersRepository = AppDataSource
                     name: true,
                     birthdate: true,
                     nDni: true,
+                    role: true,
+                    createAt: true,
+                    updateAt: true,
                     appointments: true,
+                    credentials: {
+                        id: true,
+                        updateAt: true,
+                        username: true,
+                    },
+                },
+                relations: {
+                    appointments: true,
+                    credentials: true,
                 }
             });
         },
@@ -35,7 +47,7 @@ export const UsersRepository = AppDataSource
             
             return await this.findOne({
                 where: { id },
-                relations: [ "appointments" ]
+                relations: [ "appointments", "credentials" ]
             });
         },
 
