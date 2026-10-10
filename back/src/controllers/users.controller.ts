@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import { users_get_service, user_get_id_service, user_register_service, user_login_service, user_get_id_admin_service, user_edit_service } from "../handlers/users.service";
+import { users_get_service, user_get_id_service, user_register_service, user_login_service, user_get_id_admin_service, user_edit_service, user_delete_service } from "../handlers/users.service";
 import { user_edit_dto, user_register_dto } from "../dtos/users.dto";
 import { credential_dto } from "../dtos/credential.dto";
 import { generate_token } from "../utils/jwt";
+import { ConflictException } from "../exceptions/ConflictException";
+import { NotFoundException } from "../exceptions/NotFoundException";
 
 const user_register_controller = async (req: Request<unknown, unknown, user_register_dto>, res: Response) => {
     try {
@@ -19,7 +21,7 @@ const user_register_controller = async (req: Request<unknown, unknown, user_regi
                 role: new_user.role,
 
                 credentialId: new_user.credentials.id,
-                username: new_user.credentials.username,
+                username: new_user.credentials.username
             },
         })
     } catch (err) {
@@ -92,7 +94,7 @@ const user_get_id_controller = async (req: Request, res: Response) => {
                 appointments: user.appointments,
 
                 credentialId: user.credentials.id,
-                username: user.credentials.username,
+                username: user.credentials.username
             }
         })
     } catch(err) {
@@ -120,7 +122,7 @@ const user_get_id_admin_controller = async (req: Request<{ id: string }>, res: R
                 appointments: user_found.appointments,
 
                 credentialId: user_found.credentials.id,
-                username: user_found.credentials.username,
+                username: user_found.credentials.username
             }
         })
     } catch (err) {
@@ -149,16 +151,40 @@ const user_edit_controller = async (req: Request<unknown, unknown, user_edit_dto
                 appointments: user_edit.appointments,
 
                 credentialId: user_edit.credentials.id,
-                username: user_edit.credentials.username,
+                username: user_edit.credentials.username
             }
         })
 
     } catch (err) {
         res.status(400).json({
-            message: "Error al modificar usuario",
+            message: "Error al modificar su usuario",
             error: err instanceof Error ? err.message: "Error desconocido",
         })
     }
 }
 
-export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller, user_edit_controller };
+const user_delete_controller = async (req: Request, res: Response) => {
+    try {
+        const user = req.userId!;
+
+        await user_delete_service(user);
+
+        res.status(200).json({
+            message: "Eliminó su usuario",
+            data: user
+        })
+    } catch (err) {
+        const statusCode =
+            err instanceof ConflictException ? 409 :
+            err instanceof NotFoundException ? 404 : 500;
+
+        res.status(statusCode).json({
+            message: "Error al desactivar su cuenta",
+            error: err instanceof Error
+                ? err.message
+                : "Error desconocido"
+        });
+    }
+}
+
+export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller, user_edit_controller, user_delete_controller };

@@ -40,4 +40,7 @@ export class Users{
 
     @UpdateDateColumn()
     updateAt?: Date;
+
+    @Column({ default: true })
+    isActive: boolean;
 }

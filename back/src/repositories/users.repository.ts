@@ -69,5 +69,9 @@ export const UsersRepository = AppDataSource
 
         edit_user_by_id_repo: async function (id: string, user: Omit<user_edit_dto, "username">): Promise<void> {
             await this.update({ id }, user );
+        },
+
+        user_delete_repo: async function (id: string) {
+            await this.update({ id }, { isActive: false });
         }
 });

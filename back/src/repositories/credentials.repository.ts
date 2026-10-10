@@ -21,7 +21,7 @@ export const CredentialRepository = AppDataSource
 
         return await this.findOne({
             where: { username },
-            relations: ["user"]
+            relations: { user: true }
         });
         },
 

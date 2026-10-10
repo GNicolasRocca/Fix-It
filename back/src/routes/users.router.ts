@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { users_get_controller, user_get_id_controller, user_register_controller, user_login_controller, user_get_id_admin_controller, user_edit_controller } from "../controllers/users.controller";
+import { users_get_controller, user_get_id_controller, user_register_controller, user_login_controller, user_get_id_admin_controller, user_edit_controller, user_delete_controller } from "../controllers/users.controller";
 import { validation_middleware } from "../middlewares/validation.middleware";
 import { user_edit_dto, user_register_dto } from "../dtos/users.dto";
 import { credential_dto } from "../dtos/credential.dto";
@@ -15,7 +15,7 @@ router.get("/", auth_middleware, role_middleware(Role.admin), users_get_controll
 router.get("/user", auth_middleware, user_get_id_controller); 
 router.get("/get-user/:id", auth_middleware, role_middleware(Role.admin), user_get_id_admin_controller);
 router.put("/edit", validation_middleware(user_edit_dto), auth_middleware, user_edit_controller); // Me parece que conviene cambiar el login con username por el mail
-// Poder borrar el usuario por su id 
+router.put("/delete", auth_middleware, user_delete_controller);
 // poder borrar usuario por su id ADMIN
 
 

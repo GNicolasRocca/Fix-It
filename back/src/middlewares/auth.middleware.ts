@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { verify_token } from "../utils/jwt";
+import { user_get_id_service } from "../handlers/users.service";
 
-const auth_middleware = (
+const auth_middleware = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
 
   try {
     const authorization = req.headers.authorization;
@@ -29,6 +30,16 @@ const auth_middleware = (
     }
 
     const decoded = verify_token(token);
+
+    const user = await user_get_id_service(decoded.userId);
+
+    if (!user.isActive) {
+      res.status(403).json({
+        message: "La cuenta se encuentra eliminada"
+      });
+      return;
+    }
+
 
     req.userId = decoded.userId;
     req.userRole = decoded.role;

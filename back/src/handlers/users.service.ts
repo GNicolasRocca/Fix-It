@@ -5,6 +5,7 @@ import { UsersRepository } from "../repositories/users.repository";
 import { credential_dto } from "../dtos/credential.dto";
 import { NotFoundException } from "../exceptions/NotFoundException";
 import { CredentialRepository } from "../repositories/credentials.repository";
+import { ConflictException } from "../exceptions/ConflictException";
 
 const user_register_service = async (
   user: user_register_dto
@@ -12,13 +13,13 @@ const user_register_service = async (
     const email_found = await UsersRepository.find_by_email_repo(user.email);
 
     if (email_found) {
-        throw new Error("El email ya se encuentra registrado");
+        throw new Error("El email ya fue usado");
     }
 
     const dni_found = await UsersRepository.find_by_dni_repo(user.nDni);
 
     if (dni_found) {
-        throw new Error("El DNI ya se encuentra registrado");
+        throw new Error("El DNI ya fue usado");
     }
 
     const new_credential = await credential_register_service({ 
@@ -35,6 +36,10 @@ const user_login_service = async (credential_login: credential_dto) => {
 
     if (!login_check.user) {
         throw new NotFoundException("No se encontró el usuario asociado a las credenciales");
+    }
+
+    if (!login_check.user.isActive) {
+        throw new Error("Este usuario fue eliminado");
     }
 
     return login_check;
@@ -82,4 +87,18 @@ const user_edit_service = async (id: string, user: user_edit_dto): Promise<Users
     return user_updated;
 }
 
-export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service, user_edit_service };
+const user_delete_service = async (id: string): Promise<Users> => {
+    const user_found = await user_get_id_service(id);
+
+    if (!user_found.isActive) {
+        throw new ConflictException(
+            "El usuario ya se encuentra desactivado"
+        );
+    }
+
+    await UsersRepository.user_delete_repo(user_found.id);
+
+    return user_found;
+}
+
+export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service, user_edit_service, user_delete_service };
