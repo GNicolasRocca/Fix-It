@@ -35,7 +35,19 @@ exports.UsersRepository = data_source_1.AppDataSource
                     name: true,
                     birthdate: true,
                     nDni: true,
+                    role: true,
+                    createAt: true,
+                    updateAt: true,
                     appointments: true,
+                    credentials: {
+                        id: true,
+                        updateAt: true,
+                        username: true,
+                    },
+                },
+                relations: {
+                    appointments: true,
+                    credentials: true,
                 }
             });
         });
@@ -44,7 +56,7 @@ exports.UsersRepository = data_source_1.AppDataSource
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.findOne({
                 where: { id },
-                relations: ["appointments"]
+                relations: ["appointments", "credentials"]
             });
         });
     },
@@ -62,6 +74,16 @@ exports.UsersRepository = data_source_1.AppDataSource
                 where: { nDni },
                 relations: ["appointments"]
             });
+        });
+    },
+    edit_user_by_id_repo: function (id, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.update({ id }, user);
+        });
+    },
+    user_delete_repo: function (id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.update({ id }, { isActive: false });
         });
     }
 });

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user_register_dto = void 0;
+exports.user_edit_dto = exports.user_register_dto = void 0;
 const class_validator_1 = require("class-validator");
 class user_register_dto {
 }
@@ -54,3 +54,28 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], user_register_dto.prototype, "password", void 0);
+class user_edit_dto {
+}
+exports.user_edit_dto = user_edit_dto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(2),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], user_edit_dto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^\d{4}-\d{2}-\d{2}$/, {
+        message: "La fecha de nacimiento debe tener formato YYYY-MM-DD"
+    }),
+    __metadata("design:type", String)
+], user_edit_dto.prototype, "birthdate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(4),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], user_edit_dto.prototype, "username", void 0);

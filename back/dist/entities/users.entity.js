@@ -62,6 +62,10 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Users.prototype, "updateAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
+], Users.prototype, "isActive", void 0);
 exports.Users = Users = __decorate([
     (0, typeorm_1.Entity)("users")
 ], Users);

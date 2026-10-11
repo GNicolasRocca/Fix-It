@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appointment_cancel_controller = exports.appointment_create_controller = exports.appointments_get_by_user_controller = exports.appointments_get_id_controller = exports.appointments_get_controller = void 0;
+exports.appointment_cancel_controller = exports.appointment_create_controller = exports.appointments_get_by_user_admin_controller = exports.appointments_get_by_user_controller = exports.appointments_get_id_controller = exports.appointments_get_controller = void 0;
 const appointments_service_1 = require("../handlers/appointments.service");
 const BadRequestException_1 = require("../exceptions/BadRequestException");
 const NotFoundException_1 = require("../exceptions/NotFoundException");
@@ -108,6 +108,25 @@ const appointments_get_by_user_controller = (req, res) => __awaiter(void 0, void
     }
 });
 exports.appointments_get_by_user_controller = appointments_get_by_user_controller;
+const appointments_get_by_user_admin_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.id;
+        const appointments = yield (0, appointments_service_1.get_appointments_by_user_service)(userId);
+        res.status(200).json({
+            message: `Turnos obtenidos correctamente`,
+            appointments
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            message: "Error al obtener los turnos del usuario",
+            error: err instanceof Error
+                ? err.message
+                : "Error desconocido"
+        });
+    }
+});
+exports.appointments_get_by_user_admin_controller = appointments_get_by_user_admin_controller;
 const appointment_cancel_controller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const cancelled = yield (0, appointments_service_1.appointment_cancelled)(req.params.id, req.userId);

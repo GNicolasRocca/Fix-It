@@ -6,6 +6,9 @@ import { credential_dto } from "../dtos/credential.dto";
 import { NotFoundException } from "../exceptions/NotFoundException";
 import { CredentialRepository } from "../repositories/credentials.repository";
 import { ConflictException } from "../exceptions/ConflictException";
+import { AppDataSource } from "../config/data-source";
+import { Appointments } from "../entities/appointments.entity";
+import { Status } from "../interfaces/IAppointment";
 
 const user_register_service = async (
   user: user_register_dto
@@ -88,17 +91,45 @@ const user_edit_service = async (id: string, user: user_edit_dto): Promise<Users
 }
 
 const user_delete_service = async (id: string): Promise<Users> => {
-    const user_found = await user_get_id_service(id);
+    return await AppDataSource.transaction(async (manager) => {
 
-    if (!user_found.isActive) {
-        throw new ConflictException(
-            "El usuario ya se encuentra desactivado"
+        const user_found = await manager.findOne(Users, {
+            where: { id }
+        });
+
+        if (!user_found) {
+            throw new NotFoundException(
+                "No se encontró el usuario"
+            );
+        }
+
+        if (!user_found.isActive) {
+            throw new ConflictException(
+                "El usuario ya se encuentra desactivado"
+            );
+        }
+
+        await manager.update(
+            Users,
+            { id },
+            { isActive: false }
         );
-    }
 
-    await UsersRepository.user_delete_repo(user_found.id);
+        await manager.update(
+            Appointments,
+            {
+                user: { id },
+                status: "active"
+            },
+            {
+                status: Status.cancelled
+            }
+        );
 
-    return user_found;
+        user_found.isActive = false;
+
+        return user_found;
+        });
 }
 
 export { user_register_service, user_login_service, users_get_service, user_get_id_service,  user_get_id_admin_service, user_edit_service, user_delete_service };

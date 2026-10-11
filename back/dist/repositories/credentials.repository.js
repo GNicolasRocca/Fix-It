@@ -25,7 +25,7 @@ exports.CredentialRepository = data_source_1.AppDataSource
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.findOne({
                 where: { username },
-                relations: ["user"]
+                relations: { user: true }
             });
         });
     },
@@ -34,6 +34,11 @@ exports.CredentialRepository = data_source_1.AppDataSource
             return this.findOne({
                 where: { id }
             });
+        });
+    },
+    edit_username_repo: function (credentialId, username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.update({ id: credentialId }, { username });
         });
     }
 });

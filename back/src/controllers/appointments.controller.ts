@@ -11,7 +11,12 @@ const appointment_create_controller = async (req: Request<unknown, unknown, cale
 
         res.status(201).json({
            message: "Creó un nuevo turno",
-           data: new_appointment
+           data: {
+                id: new_appointment.id,
+                date: new_appointment.date,
+                time: new_appointment.time,
+                status: new_appointment.status
+           }
         });
     }
     catch (err) {

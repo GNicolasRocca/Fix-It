@@ -43,7 +43,9 @@ const get_appointment_id_service = (id) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.get_appointment_id_service = get_appointment_id_service;
 const get_appointments_by_user_service = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield appointments_repository_1.AppointmentsRepository.find_appointment_by_user_id_repository(userId);
+    yield (0, users_service_1.user_get_id_service)(userId);
+    const appointments = yield appointments_repository_1.AppointmentsRepository.find_appointment_by_user_id_repository(userId);
+    return appointments;
 });
 exports.get_appointments_by_user_service = get_appointments_by_user_service;
 const appointment_cancelled = (appointmentId, userId) => __awaiter(void 0, void 0, void 0, function* () {

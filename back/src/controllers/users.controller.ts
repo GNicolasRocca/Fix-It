@@ -66,12 +66,12 @@ const users_get_controller = async (req: Request, res: Response): Promise<void> 
     try {
         res.status(200).json({
             message: "Obtuvó todos los usuarios",
-            data: await users_get_service(),
+            data: await users_get_service()
         });
     } catch(err) {
         res.status(500).json({ 
             message: "Error al obtener todos los usuarios", 
-            error: err instanceof Error ? err.message: "Error desconocido",
+            error: err instanceof Error ? err.message: "Error desconocido"
         });
     }
 }
@@ -187,4 +187,26 @@ const user_delete_controller = async (req: Request, res: Response) => {
     }
 }
 
-export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller, user_edit_controller, user_delete_controller };
+const user_admin_delete_controller = async (req: Request<{ id: string}>, res: Response) => {
+    try {
+        await user_delete_service(req.params.id);
+
+        res.status(200).json({
+            message: "Usuario eliminado correctamente",
+            data: req.params.id
+        })
+    } catch (err) {
+        const statusCode =
+            err instanceof ConflictException ? 409 :
+            err instanceof NotFoundException ? 404 : 500;
+
+        res.status(statusCode).json({
+            message: "Error al desactivar su cuenta",
+            error: err instanceof Error
+                ? err.message
+                : "Error desconocido"
+            });
+        }
+}
+
+export { user_register_controller, user_login_controller, users_get_controller, user_get_id_controller, user_get_id_admin_controller, user_edit_controller, user_delete_controller, user_admin_delete_controller };

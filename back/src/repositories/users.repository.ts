@@ -24,11 +24,13 @@ export const UsersRepository = AppDataSource
                 select: {
                     id: true,
                     name: true,
+                    email: true,
                     birthdate: true,
                     nDni: true,
                     role: true,
                     createAt: true,
                     updateAt: true,
+                    isActive: true, 
                     appointments: true,
                     credentials: {
                         id: true,
