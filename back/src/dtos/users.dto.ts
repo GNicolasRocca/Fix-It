@@ -7,7 +7,8 @@ import {
     MaxLength,
     Min,
     Matches,
-    IsOptional
+    IsOptional,
+    Max
 } from "class-validator";
 
 export class user_register_dto {
@@ -29,7 +30,8 @@ export class user_register_dto {
     birthdate: string;
 
     @IsInt()
-    @Min(7)
+    @Min(1000000)
+    @Max(99999999)
     nDni: number;
 
     @IsString()
