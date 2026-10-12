@@ -3,6 +3,7 @@ import Home from "./views/Home/Home";
 import { Login } from "./views/Account/Login";
 import { DeleteAccount } from "./views/Account/DeleteAccount";
 import UserProfile from "./views/Account/UserProfile";
+import EditAccount from "./views/Account/EditAccount";
 import MyAppointments from "./views/Appointment/MyAppointments";
 import { Register } from "./views/Account/Register";
 import { ScheduleAppointment } from "./views/Appointment/AppointmentSchedule";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/users/register" element={<Register />} />
           <Route path="/users/delete" element={<DeleteAccount />} />
           <Route path="/users/user" element={<UserProfile />} />
+          <Route path="/users/edit" element={<EditAccount />} />
           <Route path="/appointments/schedule" element={<ScheduleAppointment />} />
           <Route path="/appointments/my-appointments" element={<MyAppointments />} />
           <Route path="/about-us" element={<AboutUs />} />

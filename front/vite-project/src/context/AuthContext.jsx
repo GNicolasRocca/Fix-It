@@ -11,6 +11,18 @@ export const AuthProvider = ({ children }) => {
     setToken(tokenData);
   };
 
+  const updateUser = (updatedUser) => {
+    setUser((current) => {
+      if (!current || current.userId !== updatedUser.userId) return current;
+      return {
+        ...current,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        birthdate: updatedUser.birthdate,
+      };
+    });
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -23,6 +35,7 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
+        updateUser,
         isAuthenticated: !!user && !!token,
       }}
     >

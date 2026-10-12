@@ -92,10 +92,11 @@ function ProfileContent() {
             <dt>Nombre</dt><dd>{user.name}</dd>
             <dt>Usuario</dt><dd>{user.username}</dd>
             <dt>Email</dt><dd>{user.email}</dd>
-            <dt>Nacimiento</dt><dd>{user.birthdate}</dd>
+            <dt>Fecha de nacimiento</dt><dd>{user.birthdate}</dd>
             <dt>DNI</dt><dd>{user.nDni}</dd>
             <dt>Rol</dt><dd>{user.role}</dd>
           </Details>
+          <p><AppointmentsLink to="/users/edit">Editar mi información</AppointmentsLink></p>
           <AppointmentsLink to="/appointments/my-appointments">Consultar mis turnos</AppointmentsLink>
         </>}
       </Card>

@@ -62,3 +62,22 @@ export const Details = styled.dl`
   dd { margin: 0; overflow-wrap: anywhere; }
   @media (max-width: 480px) { grid-template-columns: 1fr; gap: 8px; }
 `;
+
+export const DangerButton = styled(RetryButton)`
+  background: #dc3545;
+  &:hover { background: #c82333; }
+  &:disabled { background: #aaa; cursor: not-allowed; }
+`;
+export const Confirmation = styled.section`
+  margin: 20px 0;
+  padding: 20px;
+  background: #fff5f5;
+  border: 1px solid #dc3545;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+  button { margin: 8px 12px 0 0; }
+  button:disabled { cursor: not-allowed; opacity: 0.6; }
+`;
+export const SuccessMessage = styled.p`
+  color: #217a38;
+`;
