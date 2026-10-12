@@ -194,6 +194,7 @@ const Nav_bar = () => {
                     <MenuTitle>Hola, {user.name || user.username}</MenuTitle>
 
                     <MenuText>Sesión iniciada</MenuText>
+                    <RegisterLink to="/users/delete" onClick={closeUserMenu}>Eliminar cuenta</RegisterLink>
                     <LogoutButton onClick={handleLogout}>Cerrar sesión</LogoutButton>
                   </>
                 ) : (

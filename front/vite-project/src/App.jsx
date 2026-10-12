@@ -1,6 +1,7 @@
 import Nav_bar from "./components/Navbar/Navbar";
 import Home from "./views/Home/Home";
 import { Login } from "./views/Account/Login";
+import { DeleteAccount } from "./views/Account/DeleteAccount";
 import MyAppointments from "./views/Appointment/MyAppointments";
 import { Register } from "./views/Account/Register";
 import { ScheduleAppointment } from "./views/Appointment/AppointmentSchedule";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/users/login" element={<Login />} />
           <Route path="/users/register" element={<Register />} />
+          <Route path="/users/delete" element={<DeleteAccount />} />
           <Route path="/appointments/schedule" element={<ScheduleAppointment />} />
           <Route path="/appointments/my-appointments" element={<MyAppointments />} />
           <Route path="/about-us" element={<AboutUs />} />

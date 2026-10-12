@@ -97,8 +97,13 @@ export const Register = () => {
       return;
     }
 
+     const registerData = {
+      ...data,
+      nDni: Number(data.nDni),
+    };
+
     axios
-        .post(`${API_URL}/users/register`, data)
+        .post(`${API_URL}/users/register`, registerData)
         .then(() => {
           navigate("/users/login");
         })
@@ -133,7 +138,7 @@ export const Register = () => {
       </InputGroup>
 
       <InputGroup>
-        <Input type="text" name="nDni" onChange={handle_input} placeholder="Número de DNI" />
+        <Input type="number" name="nDni" onChange={handle_input} placeholder="Número de DNI" />
         {errors.nDni && <ErrorLabel>{errors.nDni}</ErrorLabel>}
       </InputGroup>
 
