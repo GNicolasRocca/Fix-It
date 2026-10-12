@@ -90,6 +90,14 @@ const MenuTitle = styled.p`
   color: #222;
 `;
 
+const ProfileLink = styled(NavLink)`
+  color: #2e6fa0;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+  &:hover { color: #357ab8; }
+  &:focus-visible { outline: 2px solid #4a90e2; outline-offset: 3px; }
+`;
+
 const MenuText = styled.p`
   margin: 0 0 12px;
   color: #666;
@@ -191,9 +199,14 @@ const Nav_bar = () => {
 
                 {user ? (
                   <>
-                    <MenuTitle>Hola, {user.name || user.username}</MenuTitle>
+                    <MenuTitle>
+                      Hola, <ProfileLink to="/users/user" onClick={closeUserMenu} aria-label="Consultar mi perfil">{user.name || user.username}</ProfileLink>
+                    </MenuTitle>
 
                     <MenuText>Sesión iniciada</MenuText>
+                    {user.role === "admin" && (
+                      <MenuLink to="/admin" onClick={closeUserMenu}>Administración</MenuLink>
+                    )}
                     <RegisterLink to="/users/delete" onClick={closeUserMenu}>Eliminar cuenta</RegisterLink>
                     <LogoutButton onClick={handleLogout}>Cerrar sesión</LogoutButton>
                   </>
