@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import AdminCancelAppointment from "../../components/Appointment/AdminCancelAppointment";
 import { Confirmation, DangerButton, SuccessMessage, ActionLink, Badge, Details, ErrorMessage, Page, Panel, RetryButton, Table, TableWrapper } from "./AdminStyles";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -126,7 +127,6 @@ export function AdminUsers() {
       {!request.loading && !request.error && (
         request.data?.length ? (
           <TableWrapper><Table>
-            <caption>Usuarios registrados en Fix-It</caption>
             <thead><tr>
               <th scope="col">Nombre</th><th scope="col">Email</th>
               <th scope="col">Rol</th><th scope="col">Cuenta</th><th scope="col">Información</th><th scope="col">Acciones</th>
@@ -168,12 +168,13 @@ export function AdminUserDetail() {
       <RequestState request={appointmentsRequest} />
       {!appointmentsRequest.loading && !appointmentsRequest.error && (
         appointmentsRequest.data?.length ? <TableWrapper><Table>
-          <thead><tr><th scope="col">Fecha</th><th scope="col">Hora</th><th scope="col">Estado</th></tr></thead>
+          <thead><tr><th scope="col">Fecha</th><th scope="col">Hora</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead>
           <tbody>{appointmentsRequest.data.map((appointment) => <tr key={appointment.id}>
             <td>{appointment.date}</td><td>{appointment.time}</td>
             <td><Badge $active={appointment.status === "active"}>
               {appointment.status === "active" ? "Activo" : appointment.status === "cancelled" ? "Cancelado" : appointment.status}
             </Badge></td>
+            <td><AdminCancelAppointment appointment={appointment} userId={id} userName={user?.username} onCancelled={appointmentsRequest.retry} /></td>
           </tr>)}</tbody>
         </Table></TableWrapper> : <p>Este usuario no tiene turnos.</p>
       )}

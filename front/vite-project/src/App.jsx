@@ -5,6 +5,7 @@ import { DeleteAccount } from "./views/Account/DeleteAccount";
 import UserProfile from "./views/Account/UserProfile";
 import EditAccount from "./views/Account/EditAccount";
 import MyAppointments from "./views/Appointment/MyAppointments";
+import OccupiedAppointments from "./views/Appointment/OccupiedAppointments";
 import { Register } from "./views/Account/Register";
 import { ScheduleAppointment } from "./views/Appointment/AppointmentSchedule";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/users/edit" element={<EditAccount />} />
           <Route path="/appointments/schedule" element={<ScheduleAppointment />} />
           <Route path="/appointments/my-appointments" element={<MyAppointments />} />
+          <Route path="/appointments" element={<OccupiedAppointments />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<AdminUsers />} />

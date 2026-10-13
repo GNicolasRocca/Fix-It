@@ -188,6 +188,9 @@ const Nav_bar = () => {
           <NavLinkStyled to="/appointments/my-appointments">Mis turnos</NavLinkStyled>
         </NavItem>
         <NavItem>
+          <NavLinkStyled to="/appointments" end>Turnos ocupados</NavLinkStyled>
+        </NavItem>
+        <NavItem>
           <NavLinkStyled to="/about-us">Sobre nosotros</NavLinkStyled>
         </NavItem>
 
