@@ -62,7 +62,7 @@ const get_appointments_by_user_service = async (
     return appointments;
 };
 
-const appointment_cancelled = async (appointmentId: string, userId: string): Promise<Appointments> => {
+const appointment_cancelled_service = async (appointmentId: string, userId: string): Promise<Appointments> => {
     const appointment_found = await AppointmentsRepository.find_appointment_by_id_and_user_repository(appointmentId, userId);
     
      if (!appointment_found) {
@@ -129,4 +129,4 @@ const validate_appointment =  async (date: string, time: string) => {
     }
 };
 
-export { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled };
+export { get_appointments_service, get_appointment_id_service, get_appointments_by_user_service, calendar_appointment, appointment_cancelled_service };

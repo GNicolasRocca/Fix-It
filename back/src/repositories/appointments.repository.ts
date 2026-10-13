@@ -29,7 +29,7 @@ export const AppointmentsRepository = AppDataSource
             });
         },
         find_appointments_repository: async function (): Promise<Appointments[]> {
-            return await this.find();
+            return await this.find({ relations: { user: true }, order: { date: "ASC", time: "ASC" } });
         },
         find_appointment_by_id_repository: async function (id: string): Promise<Appointments | null> {
             return await this.findOne({
