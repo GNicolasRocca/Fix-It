@@ -42,9 +42,12 @@ export class user_register_dto {
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(8, {
-        message: "La contraseña debe tener al menos 8 caracteres"
-    })
+    @MinLength(8, { message: "La contraseña debe tener al menos 8 caracteres" })
+    @MaxLength(72, { message: "La contraseña no puede superar los 72 caracteres" })
+    @Matches(/[A-Z]/, { message: "La contraseña debe contener al menos una letra mayúscula" })
+    @Matches(/[a-z]/, { message: "La contraseña debe contener al menos una letra minúscula" })
+    @Matches(/[0-9]/, { message: "La contraseña debe contener al menos un número" })
+    @Matches(/[^A-Za-z0-9]/, { message: "La contraseña debe contener al menos un carácter especial" })
     password: string;
 }
 
