@@ -103,6 +103,7 @@ Fix-It/
 ### Arquitectura del backend
 
 El flujo general de una petición es:
+
 Cliente React
     ↓
 Router Express
@@ -261,6 +262,7 @@ La API permite administrar usuarios y turnos mediante métodos HTTP.
 Los endpoints protegidos requieren un token JWT válido, enviado mediante el encabezado:
 Authorization: Bearer <TOKEN>
 
+```text
 |--------|----------|-------------|
 | Usuarios y autenticación        |
 |--------|----------|-------------|
@@ -286,6 +288,7 @@ Authorization: Bearer <TOKEN>
 | POST | `/appointments/schedule` | Solicitar un turno | Autenticado |
 | PUT | `/appointments/cancel/:id` | Cancelar un turno | Autenticado |
 | PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Admin |
+```
 
 ### Ejemplos de solicitudes
 
@@ -294,6 +297,7 @@ Authorization: Bearer <TOKEN>
 POST /users/register
 Content-Type: application/json
 
+```json
 {
   "name": "Juan Pérez",
   "email": "juan@example.com",
@@ -302,16 +306,19 @@ Content-Type: application/json
   "username": "juanperez",
   "password": "Password123"
 }
+```
 
 # Iniciar sesión
 
 POST /users/login
 Content-Type: application/json
 
+```json
 {
   "username": "juanperez",
   "password": "Password123"
 }
+```
 
 # Solicitar un turno
 
@@ -319,10 +326,12 @@ POST /appointments/schedule
 Authorization: Bearer <TOKEN>
 Content-Type: application/json
 
+```json
 {
   "date": "2026-11-18",
   "time": "15:00"
 }
+```
 
 La identificación del usuario autenticado se obtiene mediante el mecanismo de autenticación del backend.
 
