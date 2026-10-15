@@ -27,8 +27,14 @@ export const validate = (inputs) => {
         errors.username = "El usuario debe tener al menos 4 caracteres";
     }
 
-    if (!inputs.password || inputs.password.length < 8) {
-        errors.password = "Debe tener la contraseña al menos 8 cáracteres";
+    if (
+        !inputs.password || inputs.password.length < 8 ||
+        !/[A-Z]/.test(inputs.password) ||
+        !/[a-z]/.test(inputs.password) ||
+        !/[0-9]/.test(inputs.password) ||
+        !/[^A-Za-z0-9]/.test(inputs.password)
+    ) {
+        errors.password = "Debe tener la contraseña al menos 8 cáracteres, una mayúscula, una minúscula, un número y un carácter especial";
     }
 
     return errors;
