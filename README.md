@@ -264,22 +264,22 @@ Authorization: Bearer <TOKEN>
 
 
 
-| Usuarios y autenticación |
-|---|---|---|---|
-| Método | Endpoint | Descripción | Acceso
-|---|---|---|---|
-| POST | `/users/register` | Registrar un nuevo usuario | Público
-| POST | `/users/login` | Autenticar un usuario | Público
-| GET |  `/users/` | Consultar todos los usuarios | Admin
-| GET |  `/users/user` | Consultar el usuario autenticado | Autenticado
-| GET | `/users/get-user/:id ` | Consultar un usuario por ID | Admin
-| PUT | `/users/edit` | Modificar datos de la cuenta autenticada | Autenticado
-| PUT | `/users/delete` | Desactivar la cuenta autenticada | Autenticado
-| PUT | `/users/user-delete/:id` | Desactivar la cuenta de otro usuario | Autenticado
+### Usuarios y autenticación 
 
-| Turnos |
-|---|---|---|
-| Método | Endpoint | Descripción | Acceso
+| Método | Endpoint | Descripción | Acceso |
+|---|---|---|---|
+| POST | `/users/register` | Registrar un nuevo usuario | Público |
+| POST | `/users/login` | Autenticar un usuario | Público |
+| GET |  `/users/` | Consultar todos los usuarios | Admin |
+| GET |  `/users/user` | Consultar el usuario autenticado | Autenticado |
+| GET | `/users/get-user/:id ` | Consultar un usuario por ID | Admin |
+| PUT | `/users/edit` | Modificar datos de la cuenta autenticada | Autenticado |
+| PUT | `/users/delete` | Desactivar la cuenta autenticada | Autenticado |
+| PUT | `/users/user-delete/:id` | Desactivar la cuenta de otro usuario | Autenticado |
+
+### Turnos
+
+| Método | Endpoint | Descripción | Acceso |
 |---|---|---|---|
 | GET | `/appointments` | Consultar turnos | Autenticado |
 | GET | `/appointments/my-appointments` | Consultar turnos propios| Autenticado |
@@ -287,7 +287,7 @@ Authorization: Bearer <TOKEN>
 | GET | `/appointments/:id` | Consultar un turno por ID | Admin |
 | POST | `/appointments/schedule` | Solicitar un turno | Autenticado |
 | PUT | `/appointments/cancel/:id` | Cancelar un turno | Autenticado |
-| PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Admin |
+| PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Cancelar el turno de un usuario | Admin |
 
 ### Ejemplos de solicitudes
 
