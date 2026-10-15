@@ -265,7 +265,13 @@ Authorization: Bearer <TOKEN>
 | Método | Endpoint | Descripción | Acceso
 |--------|----------|-------------|
 | POST | `/users/register` | Registrar un nuevo usuario | Público
-| POST | `/appointments`
+| POST | `/users/login` | Autenticar un usuario | Público
+| GET |  `/users/` | Consultar todos los usuarios | Admin
+| GET |  `/users/user` | Consultar el usuario autenticado | Autenticado
+| GET | `/users/get-user/:id ` | Consultar un usuario por ID | Admin
+| PUT | `/users/edit` | Modificar datos de la cuenta autenticada | Autenticado
+| PUT | `/users/delete` | Desactivar la cuenta autenticada | Autenticado
+| PUT | `/users/user-delete/:id` | Desactivar la cuenta de otro usuario | Autenticado
 |--------|----------|-------------|
 | Turnos                          |
 |--------|----------|-------------|
@@ -279,15 +285,84 @@ Authorization: Bearer <TOKEN>
 | PUT | `/appointments/cancel/:id` | Cancelar un turno | Autenticado |
 | PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Admin |
 
+### Ejemplos de solicitudes
 
+# Registrar un usuario
+
+POST /users/register
+Content-Type: application/json
+
+{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "birthdate": "1998-05-15",
+  "nDni": 40123456,
+  "username": "juanperez",
+  "password": "Password123"
+}
+
+# Iniciar sesión
+
+POST /users/login
+Content-Type: application/json
+
+{
+  "username": "juanperez",
+  "password": "Password123"
+}
+
+# Solicitar un turno
+
+POST /appointments/schedule
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "date": "2026-11-18",
+  "time": "15:00"
+}
+
+La identificación del usuario autenticado se obtiene mediante el mecanismo de autenticación del backend.
+
+## 🔐 Autenticación y autorización
+
+Fix-It utiliza autenticación mediante JSON Web Token (JWT).
+Al iniciar sesión correctamente, el backend genera un token que permite acceder a los endpoints protegidos.
+Los tokens tienen una duración configurada de dos horas. La autorización distingue dos roles:
+user: puede gestionar su información personal y sus turnos.
+admin: puede acceder a funcionalidades administrativas y operar sobre recursos de otros usuarios.
+
+Además, el sistema implementa baja lógica mediante la propiedad isActive. Cuando una cuenta se desactiva, sus datos permanecen en PostgreSQL, pero el usuario no puede iniciar sesión ni acceder a rutas protegidas utilizando tokens emitidos previamente.
 
 ## 📸 Capturas de pantalla
 
+Página principal.
+
+Formulario de registro e inicio de sesión.
+
+Formulario de solicitud de turnos.
+
+Vista de turnos del usuario.
+
+Edición de perfil.
+
+Panel administrativo
 
 ## 🚀 Próximas funcionalidades
 
-- [ ] Función de "whitelist". El administrador va poder hablilitar o deshabilitar a un usuario según lo considere, sería una función totalmente opcional
-- [ ] Verificación vía mail cuando el usuario se registre
-- [ ] Poder cambiar contraseña, antes solicitaría verificación vía mail para hacerlo 
-- [ ] Chat con ia o chatbot para consultas o reclamos
-- [ ] Función para reactivar una cuenta de un usuario siendo administrador
+- [ ] Administración de una lista de usuarios autorizados (whitelist)
+- [ ] Verificación de correo electrónico durante el registro
+- [ ] Recuperación y cambio de contraseña con verificación por email
+- [ ] Integración de un chatbot para consultas y reclamos
+- [ ] Reactivación de cuentas por parte del administrador
+
+## 🌐 Demo
+
+Aplicación desplegada: https://fix-it-virid-eight.vercel.app/
+Repositorio: https://github.com/GNicolasRocca/Fix-It
+
+## 👨‍💻 Autor
+
+Gonzalo Rocca
+GitHub: https://github.com/GNicolasRocca
+LinkedIn: https://www.linkedin.com/in/gonzalorocca/
