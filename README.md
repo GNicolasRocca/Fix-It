@@ -67,6 +67,7 @@ Fix It es una página web para sacar turnos de manera online para reparar equipo
 
 Fix-It es una aplicación full stack organizada en dos partes independientes, frontend y backend, dentro de un mismo repositorio. El backend implementa una arquitectura modular con separación de responsabilidades entre controladores, servicios, repositorios y entidades. El frontend está desarrollado con React y utiliza componentes reutilizables, vistas, contextos y funciones auxiliares.
 
+```text
 Fix-It/
 ├── back/
 │   ├── src/
@@ -97,6 +98,7 @@ Fix-It/
 │       └── package.json
 │
 └── README.md
+```
 
 ### Arquitectura del backend
 
