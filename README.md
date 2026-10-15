@@ -289,9 +289,9 @@ Authorization: Bearer <TOKEN>
 | PUT | `/appointments/cancel/:id` | Cancelar un turno | Autenticado |
 | PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Cancelar el turno de un usuario | Admin |
 
-### Ejemplos de solicitudes
+## Ejemplos de solicitudes
 
-# Registrar un usuario
+### Registrar un usuario
 
 POST /users/register
 Content-Type: application/json
@@ -307,7 +307,7 @@ Content-Type: application/json
 }
 ```
 
-# Iniciar sesión
+### Iniciar sesión
 
 POST /users/login
 Content-Type: application/json
@@ -319,7 +319,7 @@ Content-Type: application/json
 }
 ```
 
-# Solicitar un turno
+### Solicitar un turno
 
 POST /appointments/schedule
 Authorization: Bearer <TOKEN>
@@ -369,10 +369,13 @@ Panel administrativo
 ## 🌐 Demo
 
 Aplicación desplegada: https://fix-it-virid-eight.vercel.app/
+
 Repositorio: https://github.com/GNicolasRocca/Fix-It
 
 ## 👨‍💻 Autor
 
 Gonzalo Rocca
+
 GitHub: https://github.com/GNicolasRocca
+
 LinkedIn: https://www.linkedin.com/in/gonzalorocca/
