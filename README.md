@@ -63,7 +63,7 @@ Fix It es una página web para sacar turnos de manera online para reparar equipo
 * Restricción de acceso para usuarios desactivados
 * Control de acceso a rutas protegidas
 
-<WritingBlock id="62842" variant="document"> ## 📁 Estructura del proyecto
+## 📁 Estructura del proyecto
 
 Fix-It es una aplicación full stack organizada en dos partes independientes, frontend y backend, dentro de un mismo repositorio. El backend implementa una arquitectura modular con separación de responsabilidades entre controladores, servicios, repositorios y entidades. El frontend está desarrollado con React y utiliza componentes reutilizables, vistas, contextos y funciones auxiliares.
 
@@ -262,12 +262,12 @@ La API permite administrar usuarios y turnos mediante métodos HTTP.
 Los endpoints protegidos requieren un token JWT válido, enviado mediante el encabezado:
 Authorization: Bearer <TOKEN>
 
-```text
-|--------|----------|-------------|
-| Usuarios y autenticación        |
-|--------|----------|-------------|
+
+
+| Usuarios y autenticación |
+|---|---|---|---|
 | Método | Endpoint | Descripción | Acceso
-|--------|----------|-------------|
+|---|---|---|---|
 | POST | `/users/register` | Registrar un nuevo usuario | Público
 | POST | `/users/login` | Autenticar un usuario | Público
 | GET |  `/users/` | Consultar todos los usuarios | Admin
@@ -276,11 +276,11 @@ Authorization: Bearer <TOKEN>
 | PUT | `/users/edit` | Modificar datos de la cuenta autenticada | Autenticado
 | PUT | `/users/delete` | Desactivar la cuenta autenticada | Autenticado
 | PUT | `/users/user-delete/:id` | Desactivar la cuenta de otro usuario | Autenticado
-|--------|----------|-------------|
-| Turnos                          |
-|--------|----------|-------------|
+
+| Turnos |
+|---|---|---|
 | Método | Endpoint | Descripción | Acceso
-|--------|----------|-------------|
+|---|---|---|---|
 | GET | `/appointments` | Consultar turnos | Autenticado |
 | GET | `/appointments/my-appointments` | Consultar turnos propios| Autenticado |
 | GET | `/appointments/user-id` | Consultar los turnos de un usuario | Admin |
@@ -288,7 +288,6 @@ Authorization: Bearer <TOKEN>
 | POST | `/appointments/schedule` | Solicitar un turno | Autenticado |
 | PUT | `/appointments/cancel/:id` | Cancelar un turno | Autenticado |
 | PUT | `/appointments/user-cancel/:userId/:appointmentId ` | Admin |
-```
 
 ### Ejemplos de solicitudes
 
