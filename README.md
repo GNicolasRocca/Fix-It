@@ -63,7 +63,7 @@ Fix It es una página web para sacar turnos de manera online para reparar equipo
 * Restricción de acceso para usuarios desactivados
 * Control de acceso a rutas protegidas
 
-## 📁 Estructura del proyecto
+<WritingBlock id="62842" variant="document"> ## 📁 Estructura del proyecto
 
 Fix-It es una aplicación full stack organizada en dos partes independientes, frontend y backend, dentro de un mismo repositorio. El backend implementa una arquitectura modular con separación de responsabilidades entre controladores, servicios, repositorios y entidades. El frontend está desarrollado con React y utiliza componentes reutilizables, vistas, contextos y funciones auxiliares.
 
